@@ -23,7 +23,7 @@ const Error = () => {
             Opps! The page you'r looking for dosen't exist
           </p>
           <Link to="/">
-            <button className="btn md:btn-lg border-none bg-[#0EA106] text-white">
+            <button className="btn md:btn-lg border-none bg-[#22702d] text-white">
               Go To Home
             </button>
           </Link>
