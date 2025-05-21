@@ -39,7 +39,7 @@ const GoogleLogin = () => {
                 .then(data => {                
                   setUser(data);
                   navigate("/");
-                  console.log("data after aded to db",data);
+                  toast.success("Login Successfully !")
               })
             })
             .catch(error => {
