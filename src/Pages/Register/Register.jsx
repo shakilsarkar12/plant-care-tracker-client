@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { use, useContext, useState } from "react";
 import { FiMail } from "react-icons/fi";
 import { IoIosLink } from "react-icons/io";
 import { IoEye, IoEyeOff, IoKeyOutline } from "react-icons/io5";
@@ -18,7 +18,7 @@ const Register = () => {
   const handleRegister = (e) => {
     e.preventDefault();
     const form = e.target;
-    const name = form.name.value;
+    const displayName = form.name.value;
     const photoURL = form.photoURL.value;
     const email = form.email.value;
     const password = form.password.value;
@@ -35,19 +35,43 @@ const Register = () => {
     }
 
     registerUser(email, password)
-      .then((result) => { 
+      .then((result) => {
         const user = result.user;
-        setUser(user)
-        navigate("/")
-        toast.success("Account Created Successfully !")
+        const creationTime = user?.metadata.creationTime;
+        const lastSignInTime = user?.metadata.lastSignInTime;
+        const phoneNumber = user?.phoneNumber;
+        const emailVerified = user?.emailVerified;
+        const newUser = {
+          displayName,
+          email,
+          phoneNumber,
+          photoURL,
+          creationTime,
+          lastSignInTime,
+          emailVerified,
+        };
+        fetch("http://localhost:3000/user", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.insertedId) {
+              console.log("data after added to db", data);
+              setUser(data);
+              navigate("/");
+              toast.success("Account Created Successfully !");
+            }
+          });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error.message);
-        setErrorMesg(error.message)
-    })
+        setErrorMesg(error.message);
+      });
   };
-
-
 
   return (
     <div>
@@ -133,7 +157,7 @@ const Register = () => {
         </p>
 
         <div className="divider">OR</div>
-        <GoogleLogin/>
+        <GoogleLogin />
       </div>
     </div>
   );

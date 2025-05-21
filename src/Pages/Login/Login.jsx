@@ -21,9 +21,14 @@ const Login = () => {
     userLogin(email, password)
       .then(result => {
         const user = result.user;
-        setUser(user);
-        navigate("/");
-        toast.success("Log in Successfull !")
+        const email = user?.email;
+        fetch(`http://localhost:3000/user/${email}`)
+          .then((res) => res.json())
+          .then((data) => {
+            setUser(data);
+            navigate("/");
+            toast.success("Log in Successfull !");
+          });
       })
       .catch(error => {
         if (error.message === "Firebase: Error (auth/invalid-credential).") {

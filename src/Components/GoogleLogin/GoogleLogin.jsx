@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { FcGoogle } from "react-icons/fc";
 import { AuthContext } from '../../Context/AuthContext/AuthContext';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 const GoogleLogin = () => {
     const { loginWithGoogle, setUser } = useContext(AuthContext);
@@ -10,13 +11,39 @@ const GoogleLogin = () => {
     const handleGoogleLogin = () => {
         loginWithGoogle()
             .then(result => {
-                const user = result.user;
-                setUser(user);
-                navigate("/");
-                console.log(user);
+              const user = result.user;
+              const displayName = user?.displayName;
+              const email = user?.email;
+              const photoURL = user?.photoURL;
+              const creationTime = user?.metadata.creationTime;
+              const lastSignInTime = user?.metadata.lastSignInTime;
+              const phoneNumber = user?.phoneNumber;
+              const emailVerified = user?.emailVerified;
+              const newUser = {
+                displayName,
+                email,
+                phoneNumber,
+                photoURL,
+                creationTime,
+                lastSignInTime,
+                emailVerified,
+              };
+              
+              fetch("http://localhost:3000/user", {
+                method: "POST",
+                headers: {
+                  "content-type": "application/json",
+                },
+                body: JSON.stringify(newUser),
+              }).then((res) => res.json())
+                .then(data => {                
+                  setUser(data);
+                  navigate("/");
+                  console.log("data after aded to db",data);
+              })
             })
             .catch(error => {
-            console.log(error.message);
+            toast.warn(error.message);
         });
     };
     return (
