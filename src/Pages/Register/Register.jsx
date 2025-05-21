@@ -22,7 +22,8 @@ const Register = () => {
     const photoURL = form.photoURL.value;
     const email = form.email.value;
     const password = form.password.value;
-    const userInfo = { name, photoURL, email, password };
+    const userInfo = { displayName, photoURL, email, password };
+    console.log(userInfo);
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
     if (!passwordRegex.test(password)) {
