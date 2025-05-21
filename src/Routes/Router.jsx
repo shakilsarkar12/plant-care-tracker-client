@@ -5,6 +5,8 @@ import Error from "../Pages/Error/Error";
 import AllPlants from "../Pages/AllPlants/AllPlants";
 import AddPlants from "../Pages/AddPlants/AddPlants";
 import Myplants from "../Pages/Myplants/Myplants";
+import Register from "../Pages/Register/Register";
+import Login from "../Pages/Login/Login";
 
 export const router = createBrowserRouter([
     {
@@ -27,6 +29,14 @@ export const router = createBrowserRouter([
             {
                 path: '/myplants',
                 Component: Myplants,
+            },
+            {
+                path: '/register',
+                Component: Register,
+            },
+            {
+                path: '/login',
+                Component: Login,
             },
         ]
     }

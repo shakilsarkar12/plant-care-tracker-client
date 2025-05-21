@@ -4,8 +4,11 @@ import "../../../src/App.css";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import { RiMenuAddFill } from "react-icons/ri";
 import { Link, NavLink } from "react-router";
+import { LuLogOut } from "react-icons/lu";
 
 const Navbar = () => {
+  const { user, handleLogout } = useContext(AuthContext);
+  const [isHover, setIsHover] = useState(false);
   if (localStorage.getItem("theme") === "light") {
     localStorage.setItem("theme", "light");
   }
@@ -25,28 +28,30 @@ const Navbar = () => {
     document.querySelector("html").setAttribute("data-theme", localTheme);
   }, [theme]);
 
+
+
   const navlinks = (
     <>
       <NavLink
-        className="text-lg font font-semibold text-gray-800 hover:text-[#22702d]  "
+        className="text-lg font font-semibold hover:text-[#22702d]  "
         to="/"
       >
         Home
       </NavLink>
       <NavLink
-        className="text-lg font font-semibold text-gray-800 hover:text-[#22702d]  "
+        className="text-lg font font-semibold hover:text-[#22702d]  "
         to="/allplants"
       >
         All Plants
       </NavLink>
       <NavLink
-        className="text-lg font font-semibold text-gray-800 hover:text-[#22702d] "
+        className="text-lg font font-semibold hover:text-[#22702d] "
         to="/addplants"
       >
         Add Plant
       </NavLink>
       <NavLink
-        className="text-lg font font-semibold text-gray-800 hover:text-[#22702d] "
+        className="text-lg font font-semibold hover:text-[#22702d] "
         to="/myplants"
       >
         My Plants
@@ -57,12 +62,12 @@ const Navbar = () => {
     <div className="navbar bg-[#77eeb5] drop-shadow-2xl w-full mt-4 rounded-md indent-1 shadow-green-300 px-5">
       <div className="navbar-start">
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <RiMenuAddFill />
+          <div tabIndex={0} role="button" className=" lg:hidden  text-gray-800">
+            <RiMenuAddFill size={25} />
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow space-y-4"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 space-y-4 shadow-[0_0_5px_#22702d] top-14 -left-5"
           >
             {navlinks}
           </ul>
@@ -73,13 +78,15 @@ const Navbar = () => {
             src={navLogo}
             alt="Plant Care Tracker"
           />
-          <span className="text-2xl font-bold text-[#22702d] -ml-3">
+          <span className="text-2xl font-bold text-[#22702d] -ml-3 hidden sm:block">
             CareTracker
           </span>
         </div>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 space-x-6">{navlinks}</ul>
+        <ul className="menu menu-horizontal px-1 space-x-6  text-gray-800">
+          {navlinks}
+        </ul>
       </div>
       <div className="navbar-end">
         <label className="toggle text-base-content border border-black">
@@ -131,12 +138,56 @@ const Navbar = () => {
             </g>
           </svg>
         </label>
-        <button className="btn bg-[#22702d] border-none shadow-none font-semibold text-white ml-4">
-          <Link to="/login">Login</Link>
-        </button>
-        <button className="btn bg-[#22702d] hover:bg-[#22777d] border-none shadow-none font-semibold text-white ml-4">
-          <Link to="/register">Register</Link>
-        </button>
+        {user ? (
+          <div>
+            <div className=" avatar">
+              <div
+                onMouseOver={() => setIsHover(true)}
+                className="w-10 rounded-full ml-6 cursor-pointer relative"
+              >
+                <img
+                  alt={user?.displayName}
+                  src={
+                    user?.photoURL ||
+                    "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  }
+                />
+              </div>
+            </div>
+            {isHover && (
+              <div
+                onMouseLeave={() => setIsHover(false)}
+                className="bg-base-100 rounded-box z-1 mt-3 w-xs p-2 shadow-[0_0_5px_#22702d] space-y-4 absolute right-0 top-20"
+              >
+                <h2 className="text-xl font-semibold">
+                  Name: {user?.displayName}
+                </h2>
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-sm w-full bg-[#22702d] hover:bg-[#22777d] border-none shadow-none font-semibold text-white text-base"
+                >
+                  <LuLogOut />
+                  Log Out
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="flex">
+            <Link
+              className="btn btn-sm sm:btn-md bg-[#22702d] hover:bg-[#22777d] border-none shadow-none font-semibold text-white text-base ml-4"
+              to="/login"
+            >
+              Login
+            </Link>
+            <Link
+              className="btn btn-sm sm:btn-md bg-[#22702d] hover:bg-[#22777d] border-none shadow-none font-semibold text-white text-base ml-4 hidden sm:flex"
+              to="/register"
+            >
+              Register
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
