@@ -3,6 +3,7 @@ import Slider from '../Slider/Slider';
 import NewPlants from '../NewPlants/NewPlants';
 import { useLoaderData } from 'react-router';
 import Loader from '../Loader/Loader';
+import PlantCareTips from '../PlantCareTips/PlantCareTips';
 
 const Home = () => {
     const [plants, setPlants] = useState([]);
@@ -25,6 +26,7 @@ const Home = () => {
       <div className="w-full min-h-[calc(100vh-64px)]">
         <Slider className="z-10 " />
         <NewPlants plants={plants} />
+        <PlantCareTips />
       </div>
     );
 };
