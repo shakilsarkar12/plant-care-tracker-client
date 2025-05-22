@@ -32,7 +32,7 @@ const AllPlants = () => {
         🌿 All Plants
       </h2>
 
-      <div className="overflow-x-auto rounded-md shadow-lg border border-gray-200">
+      <div className="overflow-x-auto rounded-md shadow-[0_0_5px_#22702d]">
         <table className="table table-zebra w-full min-w-3xl">
           <thead className="bg-green-700 text-white text-base">
             <tr>
@@ -40,15 +40,12 @@ const AllPlants = () => {
               <th>Plant Name</th>
               <th>Category</th>
               <th>Watering Frequency</th>
-              <th>Actions</th>
+              <th className="w-fit lg:w-1/6">Actions</th>
             </tr>
           </thead>
           <tbody>
             {plants.map((plant, index) => (
-              <tr
-                key={plant._id || index}
-                className="transition-all"
-              >
+              <tr key={plant._id || index} className="transition-all">
                 <td className="font-semibold">{index + 1}</td>
                 <td className="text-lg font-semibold">{plant.plantName}</td>
                 <td className="text-lg font-semibold">

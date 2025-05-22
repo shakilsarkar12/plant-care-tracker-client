@@ -14,7 +14,7 @@ import {
 import Swal from "sweetalert2";
 
 const AddPlants = () => {
-  const { user } = useContext(AuthContext); // Context থেকে ইউজার ইনফো
+  const { user } = useContext(AuthContext);
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -28,9 +28,9 @@ const AddPlants = () => {
       nextWatering: form.nextWatering.value,
       healthStatus: form.healthStatus.value,
       userName: user?.displayName,
-      userEmail: user?.email,
       description: form.description.value,
       createdAt: new Date().toISOString(),
+      email: user?.email,
     };
     console.log(newPlant);
 

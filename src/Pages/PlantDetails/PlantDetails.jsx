@@ -145,7 +145,7 @@ const PlantDetails = () => {
             <div>
               <p className="font-semibold text-green-700">Added By:</p>
               <p className="capitalize text-gray-400 font-semibold">
-                {plant.userName} ({plant.userEmail})
+                {plant.userName} ({plant.email})
               </p>
             </div>
           </div>
