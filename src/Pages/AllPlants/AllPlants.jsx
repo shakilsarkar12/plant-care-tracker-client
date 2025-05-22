@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
+import Loader from "../../Components/Loader/Loader";
 
 const AllPlants = () => {
   const [plants, setPlants] = useState([]);
@@ -20,9 +21,7 @@ const AllPlants = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-[60vh]">
-        <span className="loading loading-bars loading-lg text-green-600"></span>
-      </div>
+      <Loader />
     );
   }
 

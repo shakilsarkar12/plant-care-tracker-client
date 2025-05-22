@@ -12,14 +12,17 @@ import { auth } from "../../Firebase/firebase.init";
 import { toast } from "react-toastify";
 
 const AuthProvider = ({ children }) => {
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   console.log(user);
 
   const registerUser = (email, password) => {
+    setLoading(false)
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   const userLogin = (email, password) => {
+    setLoading(false)
     return signInWithEmailAndPassword(auth, email, password);
   };
 
@@ -37,6 +40,7 @@ const AuthProvider = ({ children }) => {
         //   .then(data => {
         //     setUser(data);
         // }) 
+        setLoading(false)
         setUser(currentUser)
       } else {
         setUser(null);
@@ -58,11 +62,13 @@ const AuthProvider = ({ children }) => {
 
   const userInfo = {
     user,
+    loading,
     setUser,
     registerUser,
     loginWithGoogle,
     handleLogout,
     userLogin,
+    setLoading,
   };
 
   return <AuthContext value={userInfo}>{children}</AuthContext>;

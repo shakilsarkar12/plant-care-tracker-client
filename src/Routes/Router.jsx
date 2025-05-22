@@ -8,6 +8,7 @@ import Myplants from "../Pages/Myplants/Myplants";
 import Register from "../Pages/Register/Register";
 import Login from "../Pages/Login/Login";
 import PlantDetails from "../Pages/PlantDetails/PlantDetails";
+import Private from "../private/Private";
 
 export const router = createBrowserRouter([
   {
@@ -25,11 +26,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/addplants",
-        Component: AddPlants,
+        element: <Private><AddPlants/></Private>,
       },
       {
         path: "/myplants",
-        Component: Myplants,
+        element: <Private><Myplants/></Private>,
       },
       {
         path: "/plantdetails/:id",

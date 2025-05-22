@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
+import Loader from "../../Components/Loader/Loader";
 
 const AllPlants = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading, setLoading } = useContext(AuthContext);
   const [plants, setPlants] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`http://localhost:3000/myplants/${user?.email}`)
@@ -14,16 +14,11 @@ const AllPlants = () => {
         setLoading(false);
         setPlants(data);
       });
-  }, [user]);
+  }, [user, setLoading]);
 
-    
-    
-    
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-[60vh]">
-        <span className="loading loading-bars loading-lg text-green-600"></span>
-      </div>
+      return (
+        <Loader/>
     );
   }
 
