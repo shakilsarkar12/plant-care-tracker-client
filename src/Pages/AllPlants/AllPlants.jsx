@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import Loader from "../../Components/Loader/Loader";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 
 const AllPlants = () => {
   const [plants, setPlants] = useState([]);
@@ -53,11 +55,23 @@ const AllPlants = () => {
                 </td>
                 <td className="text-lg font-semibold">
                   <Link
+                    data-tooltip-id="view-tooltip"
+                    data-tooltip-content="Click to View Details"
                     to={`/plantdetails/${plant._id}`}
                     className="btn bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded-lg shadow transition"
                   >
-                    View Details
+                    View
                   </Link>
+                  <Tooltip
+                    id="view-tooltip"
+                    place="bottom"
+                    delayShow={400}
+                    style={{
+                      fontSize: "12px",
+                      padding: "6px",
+                      borderRadius: "6px",
+                    }}
+                  />
                 </td>
               </tr>
             ))}

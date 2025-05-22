@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 
 const MyPlants = () => {
   const { user } = useContext(AuthContext);
@@ -47,23 +49,59 @@ const MyPlants = () => {
                 </td>
                 <td className="text-lg font-semibold flex justify-end gap-4 w-fit">
                   <Link
+                    data-tooltip-id="view-tooltip"
+                    data-tooltip-content="Click to View Details"
                     to={`/plantdetails/${plant._id}`}
                     className="btn bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded-lg shadow transition"
                   >
                     View
                   </Link>
+                  <Tooltip
+                    id="view-tooltip"
+                    place="bottom"
+                    delayShow={400}
+                    style={{
+                      fontSize: "12px",
+                      padding: "6px",
+                      borderRadius: "6px",
+                    }}
+                  />
                   <Link
+                    data-tooltip-id="update-tooltip"
+                    data-tooltip-content="Click to Update Plant"
                     to={`/update/${plant._id}`}
                     className="btn bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded-lg shadow transition"
                   >
                     Upadte
                   </Link>
+                  <Tooltip
+                    id="update-tooltip"
+                    place="bottom"
+                    delayShow={400}
+                    style={{
+                      fontSize: "12px",
+                      padding: "6px",
+                      borderRadius: "6px",
+                    }}
+                  />
                   <Link
+                    data-tooltip-id="delete-tooltip"
+                    data-tooltip-content="Click to Delete Plant"
                     to={`/plantdetails/${plant._id}`}
                     className="btn bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded-lg shadow transition"
                   >
                     Delete
                   </Link>
+                  <Tooltip
+                    id="delete-tooltip"
+                    place="bottom"
+                    delayShow={400}
+                    style={{
+                      fontSize: "12px",
+                      padding: "6px",
+                      borderRadius: "6px",
+                    }}
+                  />
                 </td>
               </tr>
             ))}
