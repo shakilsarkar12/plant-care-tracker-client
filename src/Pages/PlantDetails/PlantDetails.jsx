@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams, Link, useLocation } from "react-router";
 import {
   FaLeaf,
   FaTachometerAlt,
@@ -11,11 +11,19 @@ import {
 } from "react-icons/fa";
 import { format } from "date-fns";
 import { MdTimer } from "react-icons/md";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
+import { AuthContext } from "../../Context/AuthContext/AuthContext";
 
 const PlantDetails = () => {
+  const { user } = useContext(AuthContext);
+  const location = useLocation();
   const { id } = useParams();
   const [plant, setPlant] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const fromPage = location.state?.fromPage;
+  const backButtonName = location.state?.buttonName;
 
   useEffect(() => {
     fetch(`http://localhost:3000/plant/${id}`)
@@ -23,7 +31,7 @@ const PlantDetails = () => {
       .then((data) => {
         setPlant(data);
         setLoading(false);
-      })
+      });
   }, [id]);
 
   if (loading) {
@@ -169,12 +177,50 @@ const PlantDetails = () => {
             </div>
           </div>
 
-          <Link
-            to="/allplants"
-            className="btn mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg transition"
-          >
-            Back to All Plants
-          </Link>
+          <div className="flex items-center gap-4 mt-4">
+            <div className="w-[calc(50%-2px)] sm:w-[calc(50%-8px)]">
+              <Link
+                data-tooltip-id="back-tooltip"
+                data-tooltip-content={`Click to ${backButtonName}`}
+                to={fromPage}
+                className="btn w-full bg-green-600 hover:bg-green-700 px-0 text-white py-2 rounded-lg transition"
+              >
+                {backButtonName}
+              </Link>
+              <Tooltip
+                id="back-tooltip"
+                place="bottom"
+                delayShow={400}
+                style={{
+                  fontSize: "12px",
+                  padding: "6px",
+                  borderRadius: "6px",
+                }}
+              />
+            </div>
+            {plant?.email === user?.email && (
+              <div className="w-[calc(50%-14px)] sm:w-[calc(50%-8px)]">
+                <Link
+                  data-tooltip-id="update-tooltip"
+                  data-tooltip-content="Click to Update Plant"
+                  to={`/update/${plant._id}`}
+                  className="btn w-full bg-green-600 hover:bg-green-700 text-white py-1 rounded-lg shadow transition"
+                >
+                  Upadte
+                </Link>
+                <Tooltip
+                  id="update-tooltip"
+                  place="bottom"
+                  delayShow={400}
+                  style={{
+                    fontSize: "12px",
+                    padding: "6px",
+                    borderRadius: "6px",
+                  }}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

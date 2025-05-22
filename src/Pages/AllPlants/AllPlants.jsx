@@ -57,6 +57,10 @@ const AllPlants = () => {
                   <Link
                     data-tooltip-id="view-tooltip"
                     data-tooltip-content="Click to View Details"
+                    state={{
+                      fromPage: "/allplants",
+                      buttonName: "Back to All Plants",
+                    }}
                     to={`/plantdetails/${plant._id}`}
                     className="btn bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded-lg shadow transition"
                   >

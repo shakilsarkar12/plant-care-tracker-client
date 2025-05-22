@@ -17,7 +17,33 @@ const MyPlants = () => {
       });
   }, [user, plants]);
 
-
+  const handleDelete = (_id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to deletet this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#22702d",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/plantdelate/${_id}`, {
+          method:"DELETE"
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.deletedCount) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              });
+            }
+          });
+      }
+    });
+  }
 
   return (
     <div className="max-w-7xl mx-auto mb-16">
@@ -53,6 +79,10 @@ const MyPlants = () => {
                   <Link
                     data-tooltip-id="view-tooltip"
                     data-tooltip-content="Click to View Details"
+                    state={{
+                      fromPage: "/myplants",
+                      buttonName: "Back to My Plants",
+                    }}
                     to={`/plantdetails/${plant._id}`}
                     className="btn bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded-lg shadow transition"
                   >
