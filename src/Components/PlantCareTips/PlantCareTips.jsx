@@ -31,7 +31,7 @@ const tips = [
 const PlantCareTips = () => {
   return (
     <section className="py-12">
-      <h2 className="text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
+      <h2 className="text-xl sm:text-2xl md:text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
         <FaLeaf className="text-green-700" /> Plant Care Tips
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

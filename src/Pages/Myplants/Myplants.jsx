@@ -47,9 +47,9 @@ const MyPlants = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto mb-16">
-      <h2 className="text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
-        <FaLeaf className="text-green-700" /> New Plants
+    <div className="max-w-7xl mx-auto lg:mt-12 mb-16">
+      <h2 className="text-xl sm:text-2xl md:text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
+        <FaLeaf className="text-green-700" /> My Plants
       </h2>
 
       <div className="overflow-x-auto rounded-md shadow-[0_0_5px_#22702d]">

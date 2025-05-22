@@ -6,7 +6,7 @@ import { Tooltip } from "react-tooltip";
 const NewPlants = ({plants}) => {
   return (
     <div className="py-12 mt-12">
-      <h2 className="text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
+      <h2 className="text-xl sm:text-2xl md:text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
         <FaLeaf className="text-green-700" /> New Plants
       </h2>
 

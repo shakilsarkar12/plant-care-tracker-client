@@ -45,7 +45,9 @@ const PlantDetails = () => {
   if (!plant) {
     return (
       <div className="text-center p-10">
-        <h2 className="text-xl font-semibold text-red-600">Plant not found.</h2>
+        <h2 className="text-xl sm:text-2xl md:text-xl font-semibold text-red-600">
+          Plant not found.
+        </h2>
         <Link
           to="/plants"
           className="mt-4 inline-block bg-green-600 hover:bg-green-700 text-white py-2 px-5 rounded"
@@ -57,9 +59,9 @@ const PlantDetails = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto mb-16">
-      <h2 className="text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
-        <FaLeaf className="text-green-700" /> New Plants
+    <div className="max-w-7xl mx-auto lg:mt-12 mb-16">
+      <h2 className="text-xl sm:text-2xl md:text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
+        <FaLeaf className="text-green-700" />Plants Details
       </h2>
       <h1 className="text-2xl font-bold text-green-700 mb-6">
         {plant.plantName}

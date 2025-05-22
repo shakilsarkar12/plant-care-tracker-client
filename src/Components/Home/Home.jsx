@@ -4,6 +4,7 @@ import NewPlants from '../NewPlants/NewPlants';
 import { useLoaderData } from 'react-router';
 import Loader from '../Loader/Loader';
 import PlantCareTips from '../PlantCareTips/PlantCareTips';
+import WhyChooseUs from '../WhyChooseUs/WhyChooseUs';
 
 const Home = () => {
     const [plants, setPlants] = useState([]);
@@ -27,6 +28,7 @@ const Home = () => {
         <Slider className="z-10 " />
         <NewPlants plants={plants} />
         <PlantCareTips />
+        <WhyChooseUs />
       </div>
     );
 };
