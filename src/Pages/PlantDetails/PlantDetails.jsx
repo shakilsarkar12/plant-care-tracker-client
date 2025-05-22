@@ -58,8 +58,8 @@ const PlantDetails = () => {
 
   return (
     <div className="max-w-7xl mx-auto mb-16">
-      <h2 className="text-3xl font-bold text-center text-green-700 mb-8">
-        Plants Details
+      <h2 className="text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
+        <FaLeaf className="text-green-700" /> New Plants
       </h2>
       <h1 className="text-2xl font-bold text-green-700 mb-6">
         {plant.plantName}
@@ -177,8 +177,8 @@ const PlantDetails = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 mt-4">
-            <div className="w-[calc(50%-2px)] sm:w-[calc(50%-8px)]">
+          <div className="flex items-center gap-2 sm:gap-4 mt-4 col-span-2">
+            <div className="w-[calc(50%+8px)] sm:w-[calc(50%-8px)]">
               <Link
                 data-tooltip-id="back-tooltip"
                 data-tooltip-content={`Click to ${backButtonName}`}
@@ -199,7 +199,7 @@ const PlantDetails = () => {
               />
             </div>
             {plant?.email === user?.email && (
-              <div className="w-[calc(50%-14px)] sm:w-[calc(50%-8px)]">
+              <div className="w-[calc(50%-16px)] sm:w-[calc(50%-8px)]">
                 <Link
                   data-tooltip-id="update-tooltip"
                   data-tooltip-content="Click to Update Plant"

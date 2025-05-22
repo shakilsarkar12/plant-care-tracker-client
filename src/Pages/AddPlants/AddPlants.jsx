@@ -12,6 +12,7 @@ import {
   LuHeartPulse,
 } from "react-icons/lu";
 import Swal from "sweetalert2";
+import { FaLeaf } from "react-icons/fa";
 
 const AddPlants = () => {
   const { user } = useContext(AuthContext);
@@ -56,8 +57,8 @@ const AddPlants = () => {
 
   return (
     <div className="max-w-5xl mx-auto p-6 shadow-[0_0_10px_#22702d] rounded-md mt-16 mb-16">
-      <h2 className="text-3xl font-bold text-center mb-6 text-green-700">
-        🌱 Add a New Plant
+      <h2 className="text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
+        <FaLeaf className="text-green-700" /> New Plants
       </h2>
 
       <form onSubmit={handleSubmit}>

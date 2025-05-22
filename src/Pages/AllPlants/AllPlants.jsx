@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import Loader from "../../Components/Loader/Loader";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
+import { FaLeaf } from "react-icons/fa";
 
 const AllPlants = () => {
   const [plants, setPlants] = useState([]);
@@ -25,8 +26,8 @@ const AllPlants = () => {
 
   return (
     <div className="max-w-7xl mx-auto mb-16">
-      <h2 className="text-3xl font-bold text-center text-green-700 mb-8">
-        🌿 All Plants
+      <h2 className="text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
+        <FaLeaf className="text-green-700" /> All Plants
       </h2>
 
       <div className="overflow-x-auto rounded-md shadow-[0_0_5px_#22702d]">

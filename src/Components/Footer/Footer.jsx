@@ -69,7 +69,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="text-center text-sm font-medium mt-8">
+      <div className="text-center text-sm font-medium mt-8 pt-4 border-t border-green-700">
         © {new Date().getFullYear()} Plant Care Tracker. All rights reserved.
       </div>
     </footer>

@@ -20,6 +20,9 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        loader: () => fetch("http://localhost:3000/newplants"),
+        id: "newplants",
+        hydrateFallbackElement: <Loader />,
         Component: Home,
       },
       {
@@ -48,8 +51,9 @@ export const router = createBrowserRouter([
       },
       {
         path: "/update/:id",
-        loader: ({ params }) => fetch(`http://localhost:3000/plant/${params.id}`),
-        hydrateFallbackElement: <Loader/>,
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/plant/${params.id}`),
+        hydrateFallbackElement: <Loader />,
         Component: UpdatePage,
       },
       {
