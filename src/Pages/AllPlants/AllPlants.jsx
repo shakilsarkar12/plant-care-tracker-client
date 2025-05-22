@@ -27,13 +27,13 @@ const AllPlants = () => {
   }
 
   return (
-    <div className="p-4 md:p-10 max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto mb-16">
       <h2 className="text-3xl font-bold text-center text-green-700 mb-8">
         🌿 All Plants
       </h2>
 
       <div className="overflow-x-auto rounded-md shadow-lg border border-gray-200">
-        <table className="table table-zebra w-full">
+        <table className="table table-zebra w-full min-w-3xl">
           <thead className="bg-green-700 text-white text-base">
             <tr>
               <th>#</th>
@@ -47,7 +47,7 @@ const AllPlants = () => {
             {plants.map((plant, index) => (
               <tr
                 key={plant._id || index}
-                className="hover:bg-green-50 transition-all"
+                className="transition-all"
               >
                 <td className="font-semibold">{index + 1}</td>
                 <td className="text-lg font-semibold">{plant.plantName}</td>
@@ -62,7 +62,7 @@ const AllPlants = () => {
                 <td className="text-lg font-semibold">
                   <Link
                     to={`/plantdetails/${plant._id}`}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded-lg shadow transition"
+                    className="btn bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded-lg shadow transition"
                   >
                     View Details
                   </Link>
