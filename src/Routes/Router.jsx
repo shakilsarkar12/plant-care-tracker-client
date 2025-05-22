@@ -9,6 +9,8 @@ import Register from "../Pages/Register/Register";
 import Login from "../Pages/Login/Login";
 import PlantDetails from "../Pages/PlantDetails/PlantDetails";
 import Private from "../private/Private";
+import UpdatePage from "../Pages/UpdatePage/UpdatePage";
+import Loader from "../Components/Loader/Loader";
 
 export const router = createBrowserRouter([
   {
@@ -26,15 +28,29 @@ export const router = createBrowserRouter([
       },
       {
         path: "/addplants",
-        element: <Private><AddPlants/></Private>,
+        element: (
+          <Private>
+            <AddPlants />
+          </Private>
+        ),
       },
       {
         path: "/myplants",
-        element: <Private><Myplants/></Private>,
+        element: (
+          <Private>
+            <Myplants />
+          </Private>
+        ),
       },
       {
         path: "/plantdetails/:id",
         Component: PlantDetails,
+      },
+      {
+        path: "/update/:id",
+        loader: ({ params }) => fetch(`http://localhost:3000/plant/${params.id}`),
+        hydrateFallbackElement: <Loader/>,
+        Component: UpdatePage,
       },
       {
         path: "/register",

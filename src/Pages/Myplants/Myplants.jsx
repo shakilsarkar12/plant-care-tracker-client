@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
+import Swal from "sweetalert2";
 
 const MyPlants = () => {
   const { user } = useContext(AuthContext);
@@ -14,7 +15,8 @@ const MyPlants = () => {
       .then((data) => {
         setPlants(data);
       });
-  }, [user]);
+  }, [user, plants]);
+
 
 
   return (
@@ -84,14 +86,14 @@ const MyPlants = () => {
                       borderRadius: "6px",
                     }}
                   />
-                  <Link
+                  <button
+                    onClick={() => handleDelete(plant._id)}
                     data-tooltip-id="delete-tooltip"
                     data-tooltip-content="Click to Delete Plant"
-                    to={`/plantdetails/${plant._id}`}
                     className="btn bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded-lg shadow transition"
                   >
                     Delete
-                  </Link>
+                  </button>
                   <Tooltip
                     id="delete-tooltip"
                     place="bottom"
