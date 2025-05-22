@@ -22,8 +22,6 @@ const Register = () => {
     const photoURL = form.photoURL.value;
     const email = form.email.value;
     const password = form.password.value;
-    const userInfo = { displayName, photoURL, email, password };
-    console.log(userInfo);
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
     if (!passwordRegex.test(password)) {
@@ -61,7 +59,6 @@ const Register = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.insertedId) {
-              console.log("data after added to db", data);
               setUser(data);
               navigate("/");
               toast.success("Account Created Successfully !");
@@ -69,7 +66,6 @@ const Register = () => {
           });
       })
       .catch((error) => {
-        console.log(error.message);
         setErrorMesg(error.message);
       });
   };

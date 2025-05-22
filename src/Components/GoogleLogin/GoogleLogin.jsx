@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 
 const GoogleLogin = () => {
-    const { loginWithGoogle, setUser } = useContext(AuthContext);
+    const { loginWithGoogle, setUser,  } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleGoogleLogin = () => {

@@ -6,13 +6,15 @@ import Loader from "../Components/Loader/Loader"
 const Private = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
   const location = useLocation();
-  if (loading) {
+  if (loading && !user?.email) {
     return <Loader />;
   }
 
   if (user) {
     return children;
-  } else return <Navigate state={location.pathname} to="/login" />;
+    }
+    
+    return <Navigate state={location.pathname} to="/login" />;
 };
 
 export default Private;

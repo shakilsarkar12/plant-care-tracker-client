@@ -8,7 +8,7 @@ import { LuLogOut } from "react-icons/lu";
 
 const Navbar = () => {
   const { user, handleLogout } = useContext(AuthContext);
-  const [isHover, setIsHover] = useState(false);
+  const [isOpen, setisOpen] = useState(false);
   if (localStorage.getItem("theme") === "light") {
     localStorage.setItem("theme", "light");
   }
@@ -144,38 +144,40 @@ const Navbar = () => {
             </svg>
           </label>
           {user ? (
-            <div>
-              <div className=" avatar">
-                <div
-                  onMouseOver={() => setIsHover(true)}
-                  className="w-10 rounded-full ml-6 cursor-pointer relative"
-                >
-                  <img
-                    alt={user?.displayName}
-                    src={
-                      user?.photoURL ||
-                      "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                    }
-                  />
+            <div className="dropdown dropdown-end">
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle avatar"
+              >
+                <div className="w-10 rounded-full">
+                  {user.photoURL && (
+                    <img
+                      src={
+                        user.photoURL ||
+                        "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                      }
+                      alt="Profile"
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  )}
                 </div>
               </div>
-              {isHover && (
-                <div
-                  onMouseLeave={() => setIsHover(false)}
-                  className="bg-base-100 rounded-box mt-3 w-xs p-2 shadow-[0_0_5px_#22702d] space-y-4 absolute right-0 top-20 z-[10000]"
+              <ul
+                tabIndex={0}
+                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-4 shadow space-y-4"
+              >
+                <h2 className="text-xl font-semibold">
+                  Name: {user?.displayName}
+                </h2>
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-sm w-full bg-[#22702d] hover:bg-[#22777d] border-none shadow-none font-semibold text-white text-base"
                 >
-                  <h2 className="text-xl font-semibold">
-                    Name: {user?.displayName}
-                  </h2>
-                  <button
-                    onClick={handleLogout}
-                    className="btn btn-sm w-full bg-[#22702d] hover:bg-[#22777d] border-none shadow-none font-semibold text-white text-base"
-                  >
-                    <LuLogOut />
-                    Log Out
-                  </button>
-                </div>
-              )}
+                  <LuLogOut />
+                  Log Out
+                </button>
+              </ul>
             </div>
           ) : (
             <div className="flex">

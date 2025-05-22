@@ -32,7 +32,6 @@ const AddPlants = () => {
       createdAt: new Date().toISOString(),
       email: user?.email,
     };
-    console.log(newPlant);
 
     fetch("http://localhost:3000/plants", {
       method: "POST",
@@ -44,7 +43,6 @@ const AddPlants = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.insertedId) {
-          console.log("after data added to db", data);
           Swal.fire({
             title: "Success!",
             text: "Plant added successfully!",

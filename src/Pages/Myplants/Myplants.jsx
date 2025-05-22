@@ -1,26 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
-import Loader from "../../Components/Loader/Loader";
 
-const AllPlants = () => {
-  const { user, loading, setLoading } = useContext(AuthContext);
+const MyPlants = () => {
+  const { user } = useContext(AuthContext);
   const [plants, setPlants] = useState([]);
 
   useEffect(() => {
     fetch(`http://localhost:3000/myplants/${user?.email}`)
       .then((res) => res.json())
       .then((data) => {
-        setLoading(false);
         setPlants(data);
       });
-  }, [user, setLoading]);
+  }, [user]);
 
-  if (loading) {
-      return (
-        <Loader/>
-    );
-  }
 
   return (
     <div className="max-w-7xl mx-auto mb-16">
@@ -85,4 +78,4 @@ const AllPlants = () => {
   );
 };
 
-export default AllPlants;
+export default MyPlants;

@@ -24,10 +24,6 @@ const PlantDetails = () => {
         setPlant(data);
         setLoading(false);
       })
-      .catch((err) => {
-        console.error("Error fetching plant details:", err);
-        setLoading(false);
-      });
   }, [id]);
 
   if (loading) {

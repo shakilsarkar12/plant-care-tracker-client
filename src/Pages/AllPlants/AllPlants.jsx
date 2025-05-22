@@ -13,10 +13,6 @@ const AllPlants = () => {
         setPlants(data);
         setLoading(false);
       })
-      .catch((error) => {
-        console.error("Error fetching plants:", error);
-        setLoading(false);
-      });
   }, []);
 
   if (loading) {

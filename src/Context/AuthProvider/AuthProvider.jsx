@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { AuthContext } from "../AuthContext/AuthContext";
 import {
   createUserWithEmailAndPassword,
@@ -12,17 +12,17 @@ import { auth } from "../../Firebase/firebase.init";
 import { toast } from "react-toastify";
 
 const AuthProvider = ({ children }) => {
-  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-  console.log(user);
+  const [loading, setLoading] = useState(true);
+
 
   const registerUser = (email, password) => {
-    setLoading(false)
+    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   const userLogin = (email, password) => {
-    setLoading(false)
+    setLoading(false);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
@@ -30,24 +30,6 @@ const AuthProvider = ({ children }) => {
   const loginWithGoogle = () => {
     return signInWithPopup(auth, provider);
   };
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        // const email = currentUser?.email;
-        // fetch(`http://localhost:3000/user/${email}`)
-        //   .then(res => res.json())
-        //   .then(data => {
-        //     setUser(data);
-        // }) 
-        setLoading(false)
-        setUser(currentUser)
-      } else {
-        setUser(null);
-      }
-      return unsubscribe();
-    });
-  }, []);
 
   const handleLogout = () => {
     signOut(auth)
@@ -59,6 +41,23 @@ const AuthProvider = ({ children }) => {
         toast.warn(error.message);
       });
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser)
+        fetch(`http://localhost:3000/user/${currentUser.email}`)
+          .then((res) => res.json())
+          .then((data) => {
+            setUser(data);
+            setLoading(false);
+          });
+      }
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
 
   const userInfo = {
     user,
