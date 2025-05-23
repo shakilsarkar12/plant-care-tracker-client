@@ -8,27 +8,41 @@ import { FaLeaf } from "react-icons/fa";
 const AllPlants = () => {
   const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState("");
 
   useEffect(() => {
-    fetch("https://plant-care-tracker-server-black.vercel.app/plants")
+    let url = "https://plant-care-tracker-server-black.vercel.app/plants";
+    if (sortBy) {
+      url += `?sortBy=${sortBy}`;
+    }
+    setLoading(true);
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
         setPlants(data);
         setLoading(false);
       });
-  }, []);
+  }, [sortBy]);
 
-  if (loading) {
-    return (
-      <Loader />
-    );
-  }
+  if (loading) return <Loader />;
 
   return (
     <div className="max-w-7xl mx-auto lg:mt-12 mb-16">
       <h2 className="text-xl sm:text-2xl md:text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
         <FaLeaf className="text-green-700" /> All Plants
       </h2>
+
+      <div className="flex justify-end mb-4">
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="border px-1 md:px-3 py-1 md:py-2  rounded-sm md:rounded-md text-sm text-green-700 font-medium"
+        >
+          <option value="">Sort By</option>
+          <option value="nextWatering">Next Watering Date</option>
+          <option value="careLevel">Care Level</option>
+        </select>
+      </div>
 
       <div className="overflow-x-auto rounded-md shadow-[0_0_5px_#22702d]">
         <table className="table table-zebra w-full min-w-3xl">

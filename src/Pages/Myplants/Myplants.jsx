@@ -40,6 +40,8 @@ const MyPlants = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount) {
+              const reminingPlants = plants.filter(plant => plant._id !== _id);
+              setPlants(reminingPlants)
               Swal.fire({
                 title: "Deleted!",
                 text: "Your file has been deleted.",
