@@ -10,12 +10,12 @@ const AllPlants = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/plants") 
+    fetch("https://plant-care-tracker-server-black.vercel.app/plants")
       .then((res) => res.json())
       .then((data) => {
         setPlants(data);
         setLoading(false);
-      })
+      });
   }, []);
 
   if (loading) {

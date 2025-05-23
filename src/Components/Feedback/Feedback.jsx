@@ -16,11 +16,11 @@ const Feedback = () => {
     
 
     useEffect(() => {
-        fetch("http://localhost:3000/feedback")
-            .then(res => res.json())
-            .then(data => {
-            setFeedBacks(data)
-        })
+        fetch("https://plant-care-tracker-server-black.vercel.app/feedback")
+          .then((res) => res.json())
+          .then((data) => {
+            setFeedBacks(data);
+          });
     }, [feedBacks])
     
 

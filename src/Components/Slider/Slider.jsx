@@ -22,8 +22,6 @@ const Slider = () => {
         disableOnInteraction: false,
       }}
       pagination={{ clickable: true }}
-      onSwiper={(swiper) => console.log(swiper)}
-      onSlideChange={() => console.log("slide change")}
     >
       <SwiperSlide className="-z-50">
         <Slide

@@ -20,9 +20,7 @@ const Login = () => {
     setErrorMesg("")
     userLogin(email, password)
       .then(result => {
-        const user = result.user;
-        const email = user?.email;
-        fetch(`http://localhost:3000/user/${email}`)
+        fetch(`https://plant-care-tracker-server-black.vercel.app/user/${result.user?.email}`)
           .then((res) => res.json())
           .then((data) => {
             setUser(data);

@@ -38,13 +38,16 @@ const UpdatePage = () => {
       email: user?.email,
     };
 
-    fetch(`http://localhost:3000/updateplant/${plant._id}`, {
-      method: "PUT",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(updatePlant),
-    })
+    fetch(
+      `https://plant-care-tracker-server-black.vercel.app/updateplant/${plant._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(updatePlant),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data) {

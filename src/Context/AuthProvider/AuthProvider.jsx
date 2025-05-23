@@ -15,7 +15,6 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-
   const registerUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
@@ -45,8 +44,10 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        setUser(currentUser)
-        fetch(`http://localhost:3000/user/${currentUser.email}`)
+        setUser(currentUser);
+        fetch(
+          `https://plant-care-tracker-server-black.vercel.app/user/${currentUser.email}`
+        )
           .then((res) => res.json())
           .then((data) => {
             setUser(data);
@@ -57,7 +58,6 @@ const AuthProvider = ({ children }) => {
     });
     return () => unsubscribe();
   }, []);
-
 
   const userInfo = {
     user,

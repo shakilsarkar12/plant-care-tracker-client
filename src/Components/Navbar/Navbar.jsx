@@ -159,6 +159,7 @@ const Navbar = () => {
                       user.photoURL ||
                       "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
                     }
+                    referrerPolicy="no-referrer"
                     alt="Profile"
                     className="w-10 h-10 rounded-full object-cover"
                   />

@@ -4,7 +4,6 @@ import { AuthContext } from "../../Context/AuthContext/AuthContext";
 
 const FeedbackModal = ({ closeModal,feedBacks ,setFeedBacks }) => {
   const { user } = useContext(AuthContext);
-  console.log(user);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -13,17 +12,16 @@ const FeedbackModal = ({ closeModal,feedBacks ,setFeedBacks }) => {
     const message = e.target.feedback.value;
     const date = new Date();
     const feedback = { userName, email, message, date };
-    console.log(feedback);
-    fetch("http://localhost:3000/feedback", {
+    fetch("https://plant-care-tracker-server-black.vercel.app/feedback", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(feedback),
     })
       .then((res) => res.json())
-        .then((data) => {
-            const updateFeedbacks = [...feedBacks, data]
-            setFeedBacks(updateFeedbacks)
-          Swal.fire({
+      .then((data) => {
+        const updateFeedbacks = [...feedBacks, data];
+        setFeedBacks(updateFeedbacks);
+        Swal.fire({
           title: "Good job!",
           text: "You clicked the button!",
           icon: "success",

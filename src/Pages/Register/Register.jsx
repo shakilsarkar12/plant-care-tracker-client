@@ -18,10 +18,10 @@ const Register = () => {
   const handleRegister = (e) => {
     e.preventDefault();
     const form = e.target;
-    const displayName = form.name.value;
-    const photoURL = form.photoURL.value;
-    const email = form.email.value;
-    const password = form.password.value;
+    const displayName = form?.name.value;
+    const photoURL = form?.photoURL.value;
+    const email = form?.email.value;
+    const password = form?.password.value;
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
     if (!passwordRegex.test(password)) {
@@ -49,7 +49,9 @@ const Register = () => {
           lastSignInTime,
           emailVerified,
         };
-        fetch("http://localhost:3000/user", {
+        setUser(newUser);
+        navigate("/");
+        fetch("https://plant-care-tracker-server-black.vercel.app/user", {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -59,8 +61,6 @@ const Register = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.insertedId) {
-              setUser(data);
-              navigate("/");
               toast.success("Account Created Successfully !");
             }
           });

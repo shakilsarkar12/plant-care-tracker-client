@@ -11,12 +11,14 @@ const MyPlants = () => {
   const [plants, setPlants] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/myplants/${user?.email}`)
+    fetch(
+      `https://plant-care-tracker-server-black.vercel.app/myplants/${user?.email}`
+    )
       .then((res) => res.json())
       .then((data) => {
         setPlants(data);
       });
-  }, [user, plants]);
+  }, [user]);
 
   const handleDelete = (_id) => {
     Swal.fire({
@@ -29,9 +31,12 @@ const MyPlants = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/plantdelate/${_id}`, {
-          method:"DELETE"
-        })
+        fetch(
+          `https://plant-care-tracker-server-black.vercel.app/plantdelate/${_id}`,
+          {
+            method: "DELETE",
+          }
+        )
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount) {
