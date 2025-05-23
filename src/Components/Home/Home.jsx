@@ -6,6 +6,7 @@ import Loader from '../Loader/Loader';
 import PlantCareTips from '../PlantCareTips/PlantCareTips';
 import WhyChooseUs from '../WhyChooseUs/WhyChooseUs';
 import Faq from '../Faq/Faq';
+import Feedback from '../Feedback/Feedback';
 
 const Home = () => {
     const [plants, setPlants] = useState([]);
@@ -28,7 +29,8 @@ const Home = () => {
       <div className="w-full min-h-[calc(100vh-64px)]">
         <Slider className="z-10 " />
         <NewPlants plants={plants} />
-        <PlantCareTips />
+            <PlantCareTips />
+            <Feedback/>
             <WhyChooseUs />
             <Faq />
       </div>
