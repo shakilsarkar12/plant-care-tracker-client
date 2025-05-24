@@ -1,12 +1,33 @@
-# React + Vite
+# 🌿 Plant Care Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Live Site:** [https://plant-care-tracker-c369a.web.app/](https://plant-care-tracker-c369a.web.app/)
 
-Currently, two official plugins are available:
+A full-stack, mobile-responsive web application for managing and monitoring plant care tasks like watering, fertilizing, and checking plant health. Designed with a tropical plant theme to provide a smooth and personalized experience for plant lovers.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌟 Key Features
 
-## Expanding the ESLint configuration
+- 🔐 **Secure Authentication**: Email/password and Google login with personalized dashboard access for users.
+- 🪴 **CRUD Functionality**: Users can add, view, update, and delete plants they’ve added.
+- 📆 **Smart Scheduling**: Track last and next watering dates and sort by care level or watering schedule.
+- 🎨 **Responsive and Themed UI**: Fully responsive layout with light/dark mode toggle and plant-themed design.
+- 📊 **Advanced UX Features**: SweetAlert2 feedback, loading spinners, tooltips, and Lottie animations.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Technologies Used
+
+- React 19
+- Firebase Authentication
+- Tailwind CSS + DaisyUI
+- React Router
+- React Toastify & SweetAlert2
+- Date-fns, Lodash, React Tooltip, Lottie
+
+## 🧾 Project Highlights
+
+- Meaningful UI/UX with responsive design for mobile, tablet, and desktop.
+- Private routes preserved after reload using Firebase auth state.
+- All form validations and success/error messages handled via npm packages.
+- Creative 404 page, confirmation modals, and environment variable setup.
+
+---
+
+Feel free to customize further based on your personal touches or unique design choices! Let me know if you want a version with deploy/run instructions too.

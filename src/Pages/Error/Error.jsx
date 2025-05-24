@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Navbar from "../../Components/Navbar/Navbar";
 import { Link } from "react-router";
+import errorImage from "../../assets/errorimg.png"
 
 const Error = () => {
 
@@ -13,7 +14,7 @@ const Error = () => {
         <Navbar />
         <div className="min-h-[calc(100vh-128px)] flex-col items-center flex justify-center">
           <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl-BraBWVGZSIUOFvGUTJUuPQXTLeNEyWYEg&s"
+            src={errorImage}
             alt=""
           />
           <h1 className="w-fit mx-auto text-2xl md:text-3xl lg:text-5xl font-bold mb-6 text-center">
