@@ -7,7 +7,6 @@ import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import GoogleLogin from "../../Components/GoogleLogin/GoogleLogin";
 import Swal from "sweetalert2";
-import { toast } from "react-toastify";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -56,7 +55,6 @@ const Register = () => {
         };
         setUser(newUser);
         navigate("/");
-        toast.success("hello");
         fetch("https://plant-care-tracker-server-black.vercel.app/user", {
           method: "POST",
           headers: {

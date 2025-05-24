@@ -10,6 +10,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../../Firebase/firebase.init";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -34,7 +35,11 @@ const AuthProvider = ({ children }) => {
     signOut(auth)
       .then(() => {
         setUser(null);
-        toast.success("Log-out successful.");
+        Swal.fire({
+          title: "Success",
+          text: "Log Out Successful !",
+          icon: "success",
+        });
       })
       .catch((error) => {
         toast.warn(error.message);

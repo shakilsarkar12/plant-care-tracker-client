@@ -53,7 +53,7 @@ const MyPlants = () => {
               setPlants(reminingPlants);
               Swal.fire({
                 title: "Deleted!",
-                text: "Your file has been deleted.",
+                text: "Your plant has been deleted.",
                 icon: "success",
                 confirmButtonColor: "#22702d",
               });

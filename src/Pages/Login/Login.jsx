@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FiMail } from "react-icons/fi";
 import { IoEye, IoEyeOff, IoKeyOutline } from "react-icons/io5";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import GoogleLogin from "../../Components/GoogleLogin/GoogleLogin";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import Swal from "sweetalert2";
 
 const Login = () => {
+  const location = useLocation();
   const [showPAss, setShowPass] = useState(false);
   const [errorMesg, setErrorMesg] = useState("");
   const { setUser, userLogin } = useContext(AuthContext);
@@ -24,19 +25,20 @@ const Login = () => {
     setErrorMesg("");
     userLogin(email, password)
       .then((result) => {
+        navigate(`${location.state ? location.state : "/"}`);
+
         fetch(
           `https://plant-care-tracker-server-black.vercel.app/user/${result.user?.email}`
         )
-          .then((res) => res.json())
-          .then((data) => {
-            setUser(data);
-            navigate("/");
-            Swal.fire({
-              title: "Success",
-              text: "Log In Successful !",
-              icon: "success",
-              confirmButtonColor: "#22702d",
-            });
+        .then((res) => res.json())
+        .then((data) => {
+          Swal.fire({
+            title: "Success",
+            text: "Log In Successful !",
+            icon: "success",
+            confirmButtonColor: "#22702d",
+          });
+          setUser(data);
           });
       })
       .catch((error) => {
