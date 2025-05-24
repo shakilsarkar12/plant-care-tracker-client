@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const GoogleLogin = () => {
   const { loginWithGoogle, setUser , setErrorMesg } = useContext(AuthContext);
@@ -28,7 +28,13 @@ const GoogleLogin = () => {
           lastSignInTime,
           emailVerified,
         };
-        setUser(newUser);
+       setUser(newUser);
+       Swal.fire({
+         title: "Success",
+         text: "Account Login Successful !",
+         icon: "success",
+         confirmButtonColor: "#22702d",
+       });
         navigate("/");
         fetch("https://plant-care-tracker-server-black.vercel.app/user", {
           method: "POST",
@@ -40,7 +46,12 @@ const GoogleLogin = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.insertedId) {
-              toast.success("Account Created Successfully !");
+              Swal.fire({
+                title: "Success",
+                text: "Account Created Successfully !",
+                icon: "success",
+                confirmButtonColor: "#22702d",
+              });
             }
           });
       })

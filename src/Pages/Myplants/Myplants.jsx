@@ -5,10 +5,16 @@ import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import Swal from "sweetalert2";
 import { FaLeaf } from "react-icons/fa";
+import Loader from "../../Components/Loader/Loader";
 
 const MyPlants = () => {
   const { user } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
   const [plants, setPlants] = useState([]);
+
+  useEffect(() => {
+    document.title = "My Plant - Plant Care Tracker";
+  }, []);
 
   useEffect(() => {
     fetch(
@@ -16,6 +22,7 @@ const MyPlants = () => {
     )
       .then((res) => res.json())
       .then((data) => {
+        setLoading(false);
         setPlants(data);
       });
   }, [user]);
@@ -26,8 +33,8 @@ const MyPlants = () => {
       text: "You won't be able to deletet this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#22702d",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#22702d",
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -40,18 +47,23 @@ const MyPlants = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount) {
-              const reminingPlants = plants.filter(plant => plant._id !== _id);
-              setPlants(reminingPlants)
+              const reminingPlants = plants.filter(
+                (plant) => plant._id !== _id
+              );
+              setPlants(reminingPlants);
               Swal.fire({
                 title: "Deleted!",
                 text: "Your file has been deleted.",
                 icon: "success",
+                confirmButtonColor: "#22702d",
               });
             }
           });
       }
     });
-  }
+  };
+
+  if (loading) return <Loader />;
 
   return (
     <div className="max-w-7xl mx-auto lg:mt-12 mb-16">

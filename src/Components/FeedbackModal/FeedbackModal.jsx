@@ -22,8 +22,8 @@ const FeedbackModal = ({ closeModal,feedBacks ,setFeedBacks }) => {
         const updateFeedbacks = [...feedBacks, data];
         setFeedBacks(updateFeedbacks);
         Swal.fire({
-          title: "Good job!",
-          text: "You clicked the button!",
+          title: "Thank You!",
+          text: "Thanks For Your Feedback!",
           icon: "success",
           confirmButtonColor: "#22702d",
         });

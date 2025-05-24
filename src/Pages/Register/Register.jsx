@@ -1,4 +1,4 @@
-import React, { use, useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FiMail } from "react-icons/fi";
 import { IoIosLink } from "react-icons/io";
 import { IoEye, IoEyeOff, IoKeyOutline } from "react-icons/io5";
@@ -6,6 +6,7 @@ import { LuUser } from "react-icons/lu";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import GoogleLogin from "../../Components/GoogleLogin/GoogleLogin";
+import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 
 const Register = () => {
@@ -14,6 +15,10 @@ const Register = () => {
   const [passwordError, setPasswordError] = useState("");
   const [errorMesg, setErrorMesg] = useState("");
   const { registerUser, setUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    document.title = "Register New Account - Plant Care Tracker";
+  }, []);
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -51,6 +56,7 @@ const Register = () => {
         };
         setUser(newUser);
         navigate("/");
+        toast.success("hello");
         fetch("https://plant-care-tracker-server-black.vercel.app/user", {
           method: "POST",
           headers: {
@@ -61,7 +67,12 @@ const Register = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.insertedId) {
-              toast.success("Account Created Successfully !");
+              Swal.fire({
+                title: "Success",
+                text: "Account Created Successful !",
+                icon: "success",
+                confirmButtonColor: "#22702d",
+              });
             }
           });
       })

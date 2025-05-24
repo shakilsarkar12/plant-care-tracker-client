@@ -1,4 +1,4 @@
-import React, { useContext} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import {
   LuImage,
@@ -13,9 +13,21 @@ import {
 } from "react-icons/lu";
 import Swal from "sweetalert2";
 import { FaLeaf } from "react-icons/fa";
+import Loader from "../../Components/Loader/Loader";
 
 const AddPlants = () => {
   const { user } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    document.title = "Add Your Plant - Plant Care Tracker";
+  }, []);
+
+  setTimeout(() => {
+    setLoading(false);
+  }, 200);
+  if (loading) return <Loader />;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;

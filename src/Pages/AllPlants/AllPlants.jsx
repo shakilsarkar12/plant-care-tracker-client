@@ -11,6 +11,10 @@ const AllPlants = () => {
   const [sortBy, setSortBy] = useState("");
 
   useEffect(() => {
+    document.title = "All Plants - Plant Care Tracker";
+  }, []);
+
+  useEffect(() => {
     let url = "https://plant-care-tracker-server-black.vercel.app/plants";
     if (sortBy) {
       url += `?sortBy=${sortBy}`;

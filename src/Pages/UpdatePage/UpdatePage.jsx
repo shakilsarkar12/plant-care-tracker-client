@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import {
   LuImage,
@@ -13,12 +13,25 @@ import {
 } from "react-icons/lu";
 import Swal from "sweetalert2";
 import { Link, useLoaderData, useNavigate } from "react-router";
+import Loader from "../../Components/Loader/Loader";
+import _ from "lodash";
 
 const UpdatePage = () => {
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const data = useLoaderData();
-  const [plant, setPlant] = useState(data)
-  const { user } = useContext(AuthContext); 
+  const [plant, setPlant] = useState(data);
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    document.title = "Update Plants  - Plant Care Tracker";
+  }, []);
+
+  setTimeout(() => {
+    setLoading(false);
+  }, 200);
+
+  if (loading) return <Loader />;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,9 +47,34 @@ const UpdatePage = () => {
       healthStatus: form.healthStatus.value,
       userName: user?.displayName,
       description: form.description.value,
-      createdAt: new Date().toISOString(),
       email: user?.email,
     };
+
+    const originalDataSubset = {
+      image: plant.image,
+      plantName: plant.plantName,
+      category: plant.category,
+      careLevel: plant.careLevel,
+      wateringFrequency: plant.wateringFrequency,
+      lastWatered: plant.lastWatered,
+      nextWatering: plant.nextWatering,
+      healthStatus: plant.healthStatus,
+      userName: plant.userName,
+      description: plant.description,
+      email: plant.email,
+    };
+
+    const isDataSame = _.isEqual(originalDataSubset, updatePlant);
+
+    if (isDataSame) {
+      Swal.fire({
+        icon: "info",
+        title: "No Changes Detected",
+        text: "You didn't update any information.",
+        confirmButtonColor: "#22702d",
+      });
+      return;
+    }
 
     fetch(
       `https://plant-care-tracker-server-black.vercel.app/updateplant/${plant._id}`,
@@ -55,14 +93,13 @@ const UpdatePage = () => {
           navigate("/myplants");
           Swal.fire({
             title: "Success!",
-            text: "Plant Update successfull!",
+            text: "Plant Update successful!",
             icon: "success",
             confirmButtonColor: "#22702d",
           });
         }
       });
   };
-
   return (
     <div className="max-w-5xl mx-auto p-6 shadow-[0_0_10px_#22702d] rounded-md mt-16 mb-16">
       <h2 className="text-3xl font-bold text-center mb-6 text-green-700">

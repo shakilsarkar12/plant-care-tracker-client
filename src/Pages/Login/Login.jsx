@@ -1,39 +1,50 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FiMail } from "react-icons/fi";
 import { IoEye, IoEyeOff, IoKeyOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router";
 import GoogleLogin from "../../Components/GoogleLogin/GoogleLogin";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
-import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [showPAss, setShowPass] = useState(false);
   const [errorMesg, setErrorMesg] = useState("");
   const { setUser, userLogin } = useContext(AuthContext);
   const navigate = useNavigate();
-  
+
+  useEffect(() => {
+    document.title = "Login Your Account - Plant Care Tracker";
+  }, []);
+
   const handleLogin = (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    setErrorMesg("")
+    setErrorMesg("");
     userLogin(email, password)
-      .then(result => {
-        fetch(`https://plant-care-tracker-server-black.vercel.app/user/${result.user?.email}`)
+      .then((result) => {
+        fetch(
+          `https://plant-care-tracker-server-black.vercel.app/user/${result.user?.email}`
+        )
           .then((res) => res.json())
           .then((data) => {
             setUser(data);
             navigate("/");
-            toast.success("Log in Successfull !");
+            Swal.fire({
+              title: "Success",
+              text: "Log In Successful !",
+              icon: "success",
+              confirmButtonColor: "#22702d",
+            });
           });
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.message === "Firebase: Error (auth/invalid-credential).") {
           setErrorMesg("Invalid Email and Password");
         }
-    })
-  }
+      });
+  };
 
   return (
     <div>
