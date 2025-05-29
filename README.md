@@ -1,6 +1,8 @@
 # 🌿 Plant Care Tracker
 
-**Live Site:** [click here to check Demo](https://plant-care-tracker-c369a.web.app/)
+**Live Site:**
+
+[Live Demo](https://plant-care-tracker-c369a.web.app/)
 
 A full-stack, mobile-responsive web application for managing and monitoring plant care tasks like watering, fertilizing, and checking plant health. Designed with a tropical plant theme to provide a smooth and personalized experience for plant lovers.
 
