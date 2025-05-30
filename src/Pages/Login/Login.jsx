@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FiMail } from "react-icons/fi";
 import { IoEye, IoEyeOff, IoKeyOutline } from "react-icons/io5";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import GoogleLogin from "../../Components/GoogleLogin/GoogleLogin";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import Swal from "sweetalert2";
@@ -10,12 +10,16 @@ const Login = () => {
   const location = useLocation();
   const [showPAss, setShowPass] = useState(false);
   const [errorMesg, setErrorMesg] = useState("");
-  const { setUser, userLogin } = useContext(AuthContext);
+  const { user, setUser, userLogin } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "Login Your Account - Plant Care Tracker";
   }, []);
+
+  if (user) {
+  return <Navigate to="/"/>
+}
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -55,7 +59,7 @@ const Login = () => {
         <form onSubmit={handleLogin} className="space-y-4">
           {/* email input */}
           <div className="relative">
-            <FiMail className="absolute top-3 left-3 z-10" />
+            <FiMail className="absolute top-3 left-3 z-10 text-green-700" />
             <input
               type="email"
               name="email"
@@ -67,7 +71,7 @@ const Login = () => {
 
           {/* password input */}
           <div className="relative">
-            <IoKeyOutline className="absolute top-3 left-3 z-10" />
+            <IoKeyOutline className="absolute top-3 left-3 z-10 text-green-700" />
             <input
               type={showPAss ? "text" : "password"}
               name="password"
@@ -76,7 +80,7 @@ const Login = () => {
             focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
             />
             <button
-              className="absolute top-3 right-4 z-10 cursor-pointer"
+              className="absolute top-3 right-4 z-10 text-green-700 cursor-pointer"
               type="button"
             >
               {showPAss ? (

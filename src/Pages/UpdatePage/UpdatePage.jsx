@@ -10,11 +10,14 @@ import {
   LuCalendar,
   LuCalendarClock,
   LuHeartPulse,
+  LuUser,
 } from "react-icons/lu";
 import Swal from "sweetalert2";
 import { Link, useLoaderData, useNavigate } from "react-router";
 import Loader from "../../Components/Loader/Loader";
 import _ from "lodash";
+import { FiMail } from "react-icons/fi";
+import { FaLeaf } from "react-icons/fa";
 
 const UpdatePage = () => {
   const [loading, setLoading] = useState(true);
@@ -102,12 +105,48 @@ const UpdatePage = () => {
   };
   return (
     <div className="max-w-5xl mx-auto p-6 shadow-[0_0_10px_#22702d] rounded-md mt-16 mb-16">
-      <h2 className="text-3xl font-bold text-center mb-6 text-green-700">
-        🌱 Add a New Plant
+      <h2 className="text-xl sm:text-2xl md:text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
+        <FaLeaf className="text-green-700" /> Update Your Plant
       </h2>
 
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* user Name */}
+          <div>
+            <label className="block mb-1 text-sm font-medium text-green-800">
+              User Name
+            </label>
+            <div className="relative">
+              <LuUser className="absolute top-3 left-3 z-10 text-green-700" />
+              <input
+                type="text"
+                name="name"
+                value={user?.displayName}
+                placeholder="Your Name"
+                required
+                className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
+              />
+            </div>
+          </div>
+
+          {/* user email */}
+          <div>
+            <label className="block mb-1 text-sm font-medium text-green-800">
+              User Email
+            </label>
+            <div className="relative">
+              <FiMail className="absolute top-3 left-3 z-10 text-green-700" />
+              <input
+                type="email"
+                name="email"
+                value={user?.email}
+                placeholder="Your Email"
+                required
+                className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
+              />
+            </div>
+          </div>
+
           {/* Image URL */}
           <div>
             <label className="block mb-1 text-sm font-medium text-green-800">

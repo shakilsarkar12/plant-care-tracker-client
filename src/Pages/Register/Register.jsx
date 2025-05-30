@@ -3,7 +3,7 @@ import { FiMail } from "react-icons/fi";
 import { IoIosLink } from "react-icons/io";
 import { IoEye, IoEyeOff, IoKeyOutline } from "react-icons/io5";
 import { LuUser } from "react-icons/lu";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import GoogleLogin from "../../Components/GoogleLogin/GoogleLogin";
 import Swal from "sweetalert2";
@@ -13,11 +13,15 @@ const Register = () => {
   const [showPass, setShowPass] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [errorMesg, setErrorMesg] = useState("");
-  const { registerUser, setUser } = useContext(AuthContext);
+  const { user, registerUser, setUser } = useContext(AuthContext);
 
   useEffect(() => {
     document.title = "Register New Account - Plant Care Tracker";
   }, []);
+
+    if (user) {
+    return <Navigate to="/"/>
+  }
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -86,7 +90,7 @@ const Register = () => {
         <form onSubmit={handleRegister} className="space-y-4">
           {/* Name input */}
           <div className="relative">
-            <LuUser className="absolute top-3 left-3 z-10" />
+            <LuUser className="absolute top-3 left-3 z-10 text-green-700" />
             <input
               type="text"
               name="name"
@@ -98,7 +102,7 @@ const Register = () => {
 
           {/* Photo URL input */}
           <div className="relative">
-            <IoIosLink className="absolute top-3 left-3 z-10" />
+            <IoIosLink className="absolute top-3 left-3 z-10 text-green-700" />
             <input
               type="url"
               name="photoURL"
@@ -110,7 +114,7 @@ const Register = () => {
 
           {/* Email input */}
           <div className="relative">
-            <FiMail className="absolute top-3 left-3 z-10" />
+            <FiMail className="absolute top-3 left-3 z-10 text-green-700" />
             <input
               type="email"
               name="email"
@@ -122,7 +126,7 @@ const Register = () => {
 
           {/* Password input */}
           <div className="relative">
-            <IoKeyOutline className="absolute top-3 left-3 z-10" />
+            <IoKeyOutline className="absolute top-3 left-3 z-10 text-green-700" />
             <input
               type={showPass ? "text" : "password"}
               name="password"
@@ -132,7 +136,7 @@ const Register = () => {
             />
             <button
               type="button"
-              className="absolute top-3 right-4 z-10 cursor-pointer"
+              className="absolute top-3 right-4 z-10 text-green-700 cursor-pointer"
               onClick={() => setShowPass(!showPass)}
             >
               {showPass ? <IoEyeOff size={20} /> : <IoEye size={20} />}
