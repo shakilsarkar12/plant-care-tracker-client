@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { FaLeaf } from "react-icons/fa";
 import { Tooltip } from "react-tooltip";
 
-const NewPlants = ({plants}) => {
+const NewPlants = ({ plants }) => {
   return (
     <div className="py-12 mt-12">
       <h2 className="text-xl sm:text-2xl md:text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
@@ -51,6 +51,14 @@ const NewPlants = ({plants}) => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="flex items-center justify-center mt-8">
+        <Link
+          to="/allplants"
+          className="btn border-[#22702d] hover:bg-[#22702d] hover:text-white text-[#22702d] text-lg"
+        >
+          🌿 View All Plants
+        </Link>
       </div>
     </div>
   );

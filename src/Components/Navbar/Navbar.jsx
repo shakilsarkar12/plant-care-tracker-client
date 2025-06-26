@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext} from "react";
 import navLogo from "../../assets/logo.png";
 import "../../../src/App.css";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
@@ -7,29 +7,10 @@ import { Link, NavLink } from "react-router";
 import { LuLogOut } from "react-icons/lu";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
+import ThemeToggleBtn from "../ThemeToggleBtn/ThemeToggleBtn";
 
 const Navbar = () => {
   const { user, handleLogout } = useContext(AuthContext);
-  if (localStorage.getItem("theme") === "light") {
-    localStorage.setItem("theme", "light");
-  }
-  const [theme, setTheme] = useState(localStorage.getItem("theme"));
-
-  const handleToggleTheme = (e) => {
-    if (e.target.checked) {
-      setTheme("dark");
-    } else {
-      setTheme("light");
-    }
-  };
-
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-    const localTheme = localStorage.getItem("theme");
-    document.querySelector("html").setAttribute("data-theme", localTheme);
-  }, [theme]);
-
-
 
   const navlinks = (
     <>
@@ -47,9 +28,9 @@ const Navbar = () => {
       </NavLink>
       <NavLink
         className="text-lg font font-semibold hover:text-[#22702d] "
-        to="/addplants"
+        to="/contact"
       >
-        Add Plant
+        Contact
       </NavLink>
       <NavLink
         className="text-lg font font-semibold hover:text-[#22702d] "
@@ -57,11 +38,19 @@ const Navbar = () => {
       >
         About Us
       </NavLink>
+      {user && (
+        <NavLink
+          className="text-lg font font-semibold hover:text-[#22702d] "
+          to="/dashboard"
+        >
+          Dashboard
+        </NavLink>
+      )}
     </>
   );
   return (
-    <div className="w-full  2xl:w-10/12 mx-auto px-4 sm:px-5 md:px-8 lg:px-16 xl:px-24 2xl:px-0">
-      <div className="navbar bg-[#77eeb5] mt-4 rounded-md indent-1 shadow-green-300 px-5">
+    <div className="w-full  bg-[#77eeb5] indent-1 shadow-green-300 ">
+      <div className="navbar px-4 sm:px-5 md:px-8 lg:px-16 xl:px-24 2xl:px-0 2xl:w-10/12 mx-auto">
         <div className="navbar-start">
           <div className="dropdown">
             <div
@@ -78,16 +67,13 @@ const Navbar = () => {
               {navlinks}
             </ul>
           </div>
-          <div className="flex items-center">
+          <Link to="/" className="flex items-center cursor-pointer">
             <img
               className="w-20 h-16 -mt-2"
               src={navLogo}
               alt="Plant Care Tracker"
             />
-            <span className="text-2xl font-bold text-[#22702d] -ml-3 hidden sm:block">
-              CareTracker
-            </span>
-          </div>
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 space-x-6  text-gray-800">
@@ -95,55 +81,7 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <label className="toggle text-base-content border border-black">
-            <input
-              type="checkbox"
-              value="synthwave"
-              onChange={handleToggleTheme}
-              checked={theme === "light" ? false : true}
-              className="theme-controller"
-            />
-
-            <svg
-              aria-label="sun"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <g
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                strokeWidth="2"
-                fill="none"
-                stroke="currentColor"
-              >
-                <circle cx="12" cy="12" r="4"></circle>
-                <path d="M12 2v2"></path>
-                <path d="M12 20v2"></path>
-                <path d="m4.93 4.93 1.41 1.41"></path>
-                <path d="m17.66 17.66 1.41 1.41"></path>
-                <path d="M2 12h2"></path>
-                <path d="M20 12h2"></path>
-                <path d="m6.34 17.66-1.41 1.41"></path>
-                <path d="m19.07 4.93-1.41 1.41"></path>
-              </g>
-            </svg>
-
-            <svg
-              aria-label="moon"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <g
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                strokeWidth="2"
-                fill="none"
-                stroke="currentColor"
-              >
-                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-              </g>
-            </svg>
-          </label>
+          <ThemeToggleBtn />
           {user ? (
             <div className="dropdown dropdown-end ml-4">
               <div

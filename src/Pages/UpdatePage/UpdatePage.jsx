@@ -27,7 +27,7 @@ const UpdatePage = () => {
   const [plant, setPlant] = useState(data);
   const { user } = useContext(AuthContext);
   
-  const {from} = location.state;
+  const fromPage = location.state;
 
   useEffect(() => {
     document.title = "Update Plants  - Plant Care Tracker";
@@ -96,7 +96,7 @@ const UpdatePage = () => {
       .then((data) => {
         if (data) {
           setPlant(data);
-          navigate(from || "/myplants");
+          navigate(fromPage || "/myplants");
           Swal.fire({
             title: "Success!",
             text: "Plant Update successful!",
@@ -124,6 +124,7 @@ const UpdatePage = () => {
               <input
                 type="text"
                 name="name"
+                readOnly={true}
                 value={user?.displayName}
                 placeholder="Your Name"
                 required
@@ -142,6 +143,7 @@ const UpdatePage = () => {
               <input
                 type="email"
                 name="email"
+                readOnly={true}
                 value={user?.email}
                 placeholder="Your Email"
                 required

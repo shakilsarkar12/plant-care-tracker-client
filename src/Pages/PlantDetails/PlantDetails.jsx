@@ -214,7 +214,7 @@ const PlantDetails = () => {
             {plant?.email === user?.email && (
               <div className="w-[calc(50%-16px)] sm:w-[calc(50%-8px)]">
                 <Link
-                  state={{ from: location.pathname }}
+                  state={location.pathname }
                   
                   data-tooltip-id="update-tooltip"
                   data-tooltip-content="Click to Update Plant"

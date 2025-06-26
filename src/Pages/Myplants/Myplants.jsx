@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
@@ -11,6 +11,7 @@ const MyPlants = () => {
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [plants, setPlants] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
     document.title = "My Plant - Plant Care Tracker";
@@ -119,6 +120,7 @@ const MyPlants = () => {
                     }}
                   />
                   <Link
+                    state={location.pathname}
                     data-tooltip-id="update-tooltip"
                     data-tooltip-content="Click to Update Plant"
                     to={`/update/${plant._id}`}

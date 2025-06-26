@@ -21,8 +21,9 @@ const AddPlants = () => {
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [imageFile, setImageFile] = useState(null);
+  const [selectedGalleryImage, setSelectedGalleryImage] = useState(null);
 
-  const imgbbApiKey = "2238bcd815c36dd9c39b79d62fb43968"; // এখানে আপনার ImgBB API Key বসান
+  const imgbbApiKey = import.meta.env.VITE_imgbbApiKey;
 
   useEffect(() => {
     document.title = "Add Your Plant - Plant Care Tracker";
@@ -33,41 +34,48 @@ const AddPlants = () => {
     e.preventDefault();
     const form = e.target;
 
-    if (!imageFile) {
-      return Swal.fire("Oops!", "Please select an image file.", "warning");
+    let imageUrl = "";
+
+    if (imageFile) {
+      const formData = new FormData();
+      formData.append("image", imageFile);
+
+      try {
+        const uploadRes = await fetch(
+          `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const uploadData = await uploadRes.json();
+        imageUrl = uploadData.data.url;
+      } catch (err) {
+        return Swal.fire("Error", "Image upload failed", "error");
+      }
+    } else if (selectedGalleryImage) {
+      imageUrl = selectedGalleryImage;
+    } else {
+      return Swal.fire("Oops!", "Please select or upload an image.", "warning");
     }
 
-    // Upload image to ImgBB
-    const formData = new FormData();
-    formData.append("image", imageFile);
+    const newPlant = {
+      image: imageUrl,
+      plantName: form.plantName.value,
+      category: form.category.value,
+      careLevel: form.careLevel.value,
+      wateringFrequency: form.wateringFrequency.value,
+      lastWatered: form.lastWatered.value,
+      nextWatering: form.nextWatering.value,
+      healthStatus: form.healthStatus.value,
+      userName: user?.displayName,
+      description: form.description.value,
+      createdAt: new Date().toISOString(),
+      email: user?.email,
+    };
 
     try {
-      const uploadRes = await fetch(
-        `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const uploadData = await uploadRes.json();
-      const imageUrl = uploadData.data.url;
-
-      const newPlant = {
-        image: imageUrl,
-        plantName: form.plantName.value,
-        category: form.category.value,
-        careLevel: form.careLevel.value,
-        wateringFrequency: form.wateringFrequency.value,
-        lastWatered: form.lastWatered.value,
-        nextWatering: form.nextWatering.value,
-        healthStatus: form.healthStatus.value,
-        userName: user?.displayName,
-        description: form.description.value,
-        createdAt: new Date().toISOString(),
-        email: user?.email,
-      };
-
       const res = await fetch(
         "https://plant-care-tracker-server-black.vercel.app/plants",
         {
@@ -82,9 +90,10 @@ const AddPlants = () => {
         Swal.fire("Success!", "Plant added successfully!", "success");
         form.reset();
         setImageFile(null);
+        setSelectedGalleryImage(null);
       }
     } catch (error) {
-      console.error("Image upload or plant submit error:", error);
+      console.error("Submit error:", error);
       Swal.fire("Error!", "Something went wrong.", "error");
     }
   };
@@ -133,25 +142,37 @@ const AddPlants = () => {
             </div>
           </div>
 
-          {/* Image File Upload */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-green-800">
-              Plant Image
-            </label>
-            <div className="relative">
-              <LuImage className="absolute top-3 left-3 z-10 text-green-700" />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setImageFile(e.target.files[0])}
-                required
-                className="input w-full border border-[#22702d] bg-transparent focus:outline-none pl-10 pt-2"
-              />
+          {/* Image File Upload with Preview Only */}
+          <div className="relative">
+            <div>
+              <label className="block mb-1 text-sm font-medium text-green-800">
+                Plant Image
+              </label>
+              <div className="relative">
+                <LuImage className="absolute top-3 left-3 z-10 text-green-700" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImageFile(e.target.files[0])}
+                  required
+                  className="input w-full border border-[#22702d] bg-transparent focus:outline-none px-10 pt-2"
+                />
+              </div>
             </div>
+
+            {/* Show preview if image selected */}
+            {imageFile && (
+              <div className="absolute bottom-0.5 right-0.5">
+                <img
+                  src={URL.createObjectURL(imageFile)}
+                  alt="Selected"
+                  className="w-10 h-9 object-cover rounded-md"
+                />
+              </div>
+            )}
           </div>
 
-          {/* Rest of the form remains unchanged */}
-          {/* Plant Name, Category, Care Level, etc... */}
+          {/* Plant Name */}
           <div>
             <label className="block mb-1 text-sm font-medium text-green-800">
               Plant Name
@@ -310,7 +331,6 @@ const AddPlants = () => {
           </div>
         </div>
 
-        {/* Submit Button */}
         <div className="text-center mt-8">
           <button
             type="submit"
