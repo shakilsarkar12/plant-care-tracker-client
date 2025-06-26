@@ -11,6 +11,7 @@ import PlantDetails from "../Pages/PlantDetails/PlantDetails";
 import Private from "../private/Private";
 import UpdatePage from "../Pages/UpdatePage/UpdatePage";
 import Loader from "../Components/Loader/Loader";
+import About from "../Pages/About/About";
 
 export const router = createBrowserRouter([
   {
@@ -20,8 +21,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        loader: () =>
-          fetch("https://plant-care-tracker-server-black.vercel.app/newplants"),
+        loader: () => fetch("http://localhost:3000/newplants"),
         id: "newplants",
         hydrateFallbackElement: <Loader />,
         Component: Home,
@@ -45,6 +45,10 @@ export const router = createBrowserRouter([
             <Myplants />
           </Private>
         ),
+      },
+      {
+        path: "/about",
+        Component: About,
       },
       {
         path: "/plantdetails/:id",

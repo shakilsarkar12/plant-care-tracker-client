@@ -13,7 +13,7 @@ import {
   LuUser,
 } from "react-icons/lu";
 import Swal from "sweetalert2";
-import { Link, useLoaderData, useNavigate } from "react-router";
+import { Link, useLoaderData, useLocation, useNavigate } from "react-router";
 import Loader from "../../Components/Loader/Loader";
 import _ from "lodash";
 import { FiMail } from "react-icons/fi";
@@ -22,9 +22,12 @@ import { FaLeaf } from "react-icons/fa";
 const UpdatePage = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
   const data = useLoaderData();
   const [plant, setPlant] = useState(data);
   const { user } = useContext(AuthContext);
+  
+  const {from} = location.state;
 
   useEffect(() => {
     document.title = "Update Plants  - Plant Care Tracker";
@@ -93,7 +96,7 @@ const UpdatePage = () => {
       .then((data) => {
         if (data) {
           setPlant(data);
-          navigate("/myplants");
+          navigate(from || "/myplants");
           Swal.fire({
             title: "Success!",
             text: "Plant Update successful!",

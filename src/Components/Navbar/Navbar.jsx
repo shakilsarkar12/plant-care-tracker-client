@@ -53,15 +53,15 @@ const Navbar = () => {
       </NavLink>
       <NavLink
         className="text-lg font font-semibold hover:text-[#22702d] "
-        to="/myplants"
+        to="/about"
       >
-        My Plants
+        About Us
       </NavLink>
     </>
   );
   return (
     <div className="w-full  2xl:w-10/12 mx-auto px-4 sm:px-5 md:px-8 lg:px-16 xl:px-24 2xl:px-0">
-      <div className="navbar bg-[#77eeb5] mt-4 rounded-md indent-1 shadow-green-300 px-5 z-50">
+      <div className="navbar bg-[#77eeb5] mt-4 rounded-md indent-1 shadow-green-300 px-5">
         <div className="navbar-start">
           <div className="dropdown">
             <div

@@ -33,8 +33,11 @@ const FeedbackModal = ({ closeModal,feedBacks ,setFeedBacks }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-gray-500/30 backdrop-blur-sm"></div>
-      <div className="relative rounded-xl p-6 w-11/12 max-w-md shadow-[0_0_6px_#22702d] z-10">
+      <div
+        onClick={closeModal}
+        className="absolute inset-0 bg-gray-500/30 backdrop-blur-sm"
+      ></div>
+      <div className="relative rounded-xl p-6 w-11/12 max-w-md z-10 bg-base-300">
         <h3 className="text-xl font-bold mb-4 text-green-700">
           🌿 Share Your Thoughts
         </h3>
@@ -50,7 +53,7 @@ const FeedbackModal = ({ closeModal,feedBacks ,setFeedBacks }) => {
             <button
               type="button"
               onClick={closeModal}
-              className="px-4 py-2 border border-gray-400 rounded-lg"
+              className="px-4 py-2 border bg-red-400 border-none rounded-lg"
             >
               Cancel
             </button>

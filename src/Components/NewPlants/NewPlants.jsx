@@ -10,7 +10,7 @@ const NewPlants = ({plants}) => {
         <FaLeaf className="text-green-700" /> New Plants
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {plants.map((plant) => (
           <div
             key={plant._id}

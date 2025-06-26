@@ -20,65 +20,86 @@ import { FiMail } from "react-icons/fi";
 const AddPlants = () => {
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
+  const [imageFile, setImageFile] = useState(null);
+
+  const imgbbApiKey = "2238bcd815c36dd9c39b79d62fb43968"; // এখানে আপনার ImgBB API Key বসান
 
   useEffect(() => {
     document.title = "Add Your Plant - Plant Care Tracker";
+    setTimeout(() => setLoading(false), 200);
   }, []);
 
-  setTimeout(() => {
-    setLoading(false);
-  }, 200);
-  if (loading) return <Loader />;
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const newPlant = {
-      image: form.image.value,
-      plantName: form.plantName.value,
-      category: form.category.value,
-      careLevel: form.careLevel.value,
-      wateringFrequency: form.wateringFrequency.value,
-      lastWatered: form.lastWatered.value,
-      nextWatering: form.nextWatering.value,
-      healthStatus: form.healthStatus.value,
-      userName: user?.displayName,
-      description: form.description.value,
-      createdAt: new Date().toISOString(),
-      email: user?.email,
-    };
 
-    fetch("https://plant-care-tracker-server-black.vercel.app/plants", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(newPlant),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.insertedId) {
-          Swal.fire({
-            title: "Success!",
-            text: "Plant added successfully!",
-            icon: "success",
-            confirmButtonColor: "#22702d",
-          });
-          form.reset();
+    if (!imageFile) {
+      return Swal.fire("Oops!", "Please select an image file.", "warning");
+    }
+
+    // Upload image to ImgBB
+    const formData = new FormData();
+    formData.append("image", imageFile);
+
+    try {
+      const uploadRes = await fetch(
+        `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`,
+        {
+          method: "POST",
+          body: formData,
         }
-      });
+      );
+
+      const uploadData = await uploadRes.json();
+      const imageUrl = uploadData.data.url;
+
+      const newPlant = {
+        image: imageUrl,
+        plantName: form.plantName.value,
+        category: form.category.value,
+        careLevel: form.careLevel.value,
+        wateringFrequency: form.wateringFrequency.value,
+        lastWatered: form.lastWatered.value,
+        nextWatering: form.nextWatering.value,
+        healthStatus: form.healthStatus.value,
+        userName: user?.displayName,
+        description: form.description.value,
+        createdAt: new Date().toISOString(),
+        email: user?.email,
+      };
+
+      const res = await fetch(
+        "https://plant-care-tracker-server-black.vercel.app/plants",
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(newPlant),
+        }
+      );
+
+      const data = await res.json();
+      if (data.insertedId) {
+        Swal.fire("Success!", "Plant added successfully!", "success");
+        form.reset();
+        setImageFile(null);
+      }
+    } catch (error) {
+      console.error("Image upload or plant submit error:", error);
+      Swal.fire("Error!", "Something went wrong.", "error");
+    }
   };
 
+  if (loading) return <Loader />;
+
   return (
-    <div className="max-w-5xl mx-auto p-6 shadow-[0_0_10px_#22702d] rounded-md mt-12 mb-16">
+    <div className="max-w-5xl mx-auto p-6 shadow-[0_0_10px_#22702d] rounded-md mt-8 lg:mt-12 mb-16">
       <h2 className="text-xl sm:text-2xl md:text-3xl text-green-700 font-bold text-center mb-8 flex items-center justify-center gap-2">
         <FaLeaf className="text-green-700" /> Add New Plants
       </h2>
 
       <form onSubmit={handleSubmit}>
-        {/* user name */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* user Name */}
+          {/* User Name */}
           <div>
             <label className="block mb-1 text-sm font-medium text-green-800">
               User Name
@@ -89,14 +110,13 @@ const AddPlants = () => {
                 type="text"
                 name="name"
                 value={user?.displayName}
-                placeholder="Your Name"
-                required
-                className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
+                readOnly
+                className="input w-full border border-[#22702d] bg-transparent focus:outline-none pl-10"
               />
             </div>
           </div>
 
-          {/* user email */}
+          {/* User Email */}
           <div>
             <label className="block mb-1 text-sm font-medium text-green-800">
               User Email
@@ -107,31 +127,31 @@ const AddPlants = () => {
                 type="email"
                 name="email"
                 value={user?.email}
-                placeholder="Your Email"
-                required
-                className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
+                readOnly
+                className="input w-full border border-[#22702d] bg-transparent focus:outline-none pl-10"
               />
             </div>
           </div>
 
-          {/* Image URL */}
+          {/* Image File Upload */}
           <div>
             <label className="block mb-1 text-sm font-medium text-green-800">
-              Image URL
+              Plant Image
             </label>
             <div className="relative">
               <LuImage className="absolute top-3 left-3 z-10 text-green-700" />
               <input
-                type="text"
-                name="image"
-                placeholder="Image URL"
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImageFile(e.target.files[0])}
                 required
-                className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
+                className="input w-full border border-[#22702d] bg-transparent focus:outline-none pl-10 pt-2"
               />
             </div>
           </div>
 
-          {/* Plant Name */}
+          {/* Rest of the form remains unchanged */}
+          {/* Plant Name, Category, Care Level, etc... */}
           <div>
             <label className="block mb-1 text-sm font-medium text-green-800">
               Plant Name
@@ -143,7 +163,7 @@ const AddPlants = () => {
                 name="plantName"
                 placeholder="Plant Name"
                 required
-                className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
+                className="input w-full border border-[#22702d] bg-transparent focus:outline-none pl-10"
               />
             </div>
           </div>
@@ -159,9 +179,11 @@ const AddPlants = () => {
                 name="category"
                 defaultValue=""
                 required
-                className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
+                className="input w-full border border-[#22702d] bg-transparent focus:outline-none pl-10"
               >
-                <option value="" disabled>Select Category</option>
+                <option value="" disabled>
+                  Select Category
+                </option>
                 <option className="text-black" value="Succulent">
                   Succulent
                 </option>
@@ -186,9 +208,11 @@ const AddPlants = () => {
                 name="careLevel"
                 defaultValue=""
                 required
-                className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
+                className="input w-full border border-[#22702d] bg-transparent focus:outline-none pl-10"
               >
-                <option value="" disabled={true}>Select Care Level</option>
+                <option value="" disabled>
+                  Select Care Level
+                </option>
                 <option className="text-black" value="easy">
                   Easy
                 </option>
@@ -214,7 +238,7 @@ const AddPlants = () => {
                 name="wateringFrequency"
                 placeholder="e.g. Every 3 days"
                 required
-                className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
+                className="input w-full border border-[#22702d] bg-transparent focus:outline-none pl-10"
               />
             </div>
           </div>
@@ -230,7 +254,7 @@ const AddPlants = () => {
                 type="date"
                 name="lastWatered"
                 required
-                className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
+                className="input w-full border border-[#22702d] bg-transparent focus:outline-none pl-10"
               />
             </div>
           </div>
@@ -246,7 +270,7 @@ const AddPlants = () => {
                 type="date"
                 name="nextWatering"
                 required
-                className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
+                className="input w-full border border-[#22702d] bg-transparent focus:outline-none pl-10"
               />
             </div>
           </div>
@@ -263,7 +287,7 @@ const AddPlants = () => {
                 name="healthStatus"
                 placeholder="Health Status"
                 required
-                className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
+                className="input w-full border border-[#22702d] bg-transparent focus:outline-none pl-10"
               />
             </div>
           </div>
@@ -279,12 +303,13 @@ const AddPlants = () => {
                 name="description"
                 placeholder="Description"
                 required
-                className="textarea w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10 pt-3"
+                className="textarea w-full border border-[#22702d] bg-transparent focus:outline-none pl-10 pt-3"
                 rows="4"
               />
             </div>
           </div>
         </div>
+
         {/* Submit Button */}
         <div className="text-center mt-8">
           <button

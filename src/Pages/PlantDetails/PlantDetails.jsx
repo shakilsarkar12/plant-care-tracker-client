@@ -21,6 +21,7 @@ const PlantDetails = () => {
   const { id } = useParams();
   const [plant, setPlant] = useState(null);
   const [loading, setLoading] = useState(true);
+  console.log(location);
 
   useEffect(() => {
     document.title = "Plant Details - Plant Care Tracker";
@@ -30,11 +31,15 @@ const PlantDetails = () => {
   const backButtonName = location.state?.buttonName;
 
   useEffect(() => {
-    fetch(`https://plant-care-tracker-server-black.vercel.app/plant/${id}`)
+    fetch(`http://localhost:3000/plant/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setPlant(data);
         setLoading(false);
+      })
+      .catch((err) => {
+        setPlant(null);
+        console.log(err);
       });
   }, [id]);
 
@@ -47,6 +52,7 @@ const PlantDetails = () => {
   }
 
   if (!plant) {
+    setLoading(false)
     return (
       <div className="text-center p-10">
         <h2 className="text-xl sm:text-2xl md:text-xl font-semibold text-red-600">
@@ -80,8 +86,8 @@ const PlantDetails = () => {
             className="w-full h-full object-cover transform group-hover:scale-105 transition duration-500"
           />
 
-          <div className="absolute inset-0 bg-gray-300/10  opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
-            <h1 className="text-4xl font-bold text-green-400 mb-6">
+          <div className="absolute inset-0 bg-gray-700/45  opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+            <h1 className="text-4xl font-bold text-white mb-6">
               {plant.plantName}
             </h1>
           </div>
@@ -188,11 +194,11 @@ const PlantDetails = () => {
             <div className="w-[calc(50%+8px)] sm:w-[calc(50%-8px)]">
               <Link
                 data-tooltip-id="back-tooltip"
-                data-tooltip-content={`Click to ${backButtonName}`}
-                to={fromPage}
+                data-tooltip-content={`Click to ${backButtonName? backButtonName : "Back Homo"}`}
+                to={fromPage? fromPage : "/"}
                 className="btn w-full bg-green-600 hover:bg-green-700 px-0 text-white py-2 rounded-lg transition"
               >
-                {backButtonName}
+                {backButtonName? backButtonName : "Back To Home"}
               </Link>
               <Tooltip
                 id="back-tooltip"
@@ -208,6 +214,8 @@ const PlantDetails = () => {
             {plant?.email === user?.email && (
               <div className="w-[calc(50%-16px)] sm:w-[calc(50%-8px)]">
                 <Link
+                  state={{ from: location.pathname }}
+                  
                   data-tooltip-id="update-tooltip"
                   data-tooltip-content="Click to Update Plant"
                   to={`/update/${plant._id}`}
