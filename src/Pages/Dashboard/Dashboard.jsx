@@ -77,7 +77,7 @@ const Dashboard = () => {
   const unhealthyCount = plants.length - healthyCount;
 
   useEffect(() => {
-    fetch(`http://localhost:3000/upcoming-plants/${user?.email}`)
+    fetch(`https://plant-care-tracker-server-black.vercel.app/upcoming-plants/${user?.email}`)
       .then((res) => res.json())
       .then((data) => setUpcomingPlants(data))
       .catch((err) => console.error("Failed to load upcoming plants", err));

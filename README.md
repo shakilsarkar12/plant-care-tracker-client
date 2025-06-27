@@ -32,4 +32,6 @@ A full-stack, mobile-responsive web application for managing and monitoring plan
 
 ---
 
+[Server Side Repository](https://github.com/shakilsarkar12/plant-care-tracker-server)
+
 Feel free to customize further based on your personal touches or unique design choices! Let me know if you want a version with deploy/run instructions too.
