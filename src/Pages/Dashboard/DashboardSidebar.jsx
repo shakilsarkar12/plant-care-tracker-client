@@ -11,6 +11,7 @@ import {
 import { TbPlant2 } from "react-icons/tb";
 import { useContext } from "react";
 import { AuthContext } from "../../Context/AuthContext/AuthContext"; 
+import navLogo from "../../assets/logo.png";
 
 const DashboardSidebar = ({ closeDrawer }) => {
   const { handleLogout } = useContext(AuthContext);
@@ -28,18 +29,24 @@ const DashboardSidebar = ({ closeDrawer }) => {
     <aside className="w-full lg:w-64 py-5 bg-base-300 h-screen flex flex-col justify-between overflow-y-auto">
       <div>
         {/* Drawer Close Button */}
-        <div className="lg:hidden flex justify-end mb-4">
-          <button onClick={closeDrawer} className="text-green-700">
+        <div className="flex  justify-between items-start mb-4">
+          <Link to="/" className="flex items-center cursor-pointer">
+            <img
+              className="w-20 h-16 -mt-2"
+              src={navLogo}
+              alt="Plant Care Tracker"
+            />
+          </Link>
+          <label
+            htmlFor="my-drawer-2"
+            onClick={closeDrawer}
+            className=" text-green-700 mr-4 lg:hidden"
+          >
             <FiX size={24} />
-          </button>
+          </label>
         </div>
 
-        <Link to='/'>
-          <h2 className="text-2xl font-bold text-[#22702d] mb-6 text-center">
-            Dashboard
-          </h2>
-        </Link>
-        <nav className="flex flex-col">
+        <nav className="flex flex-col text-base">
           <NavLink
             to="/dashboard"
             onClick={handleLinkClick}
@@ -82,7 +89,7 @@ const DashboardSidebar = ({ closeDrawer }) => {
         </nav>
       </div>
 
-      <div className="mt-6 border-t pt-4">
+      <div className="border-t px-4 pt-4">
         <button
           onClick={handleLogout}
           className="w-full flex items-center justify-center gap-2 text-white bg-[#22702d] hover:bg-[#1a5a25] py-2 px-4 rounded-md"

@@ -31,7 +31,7 @@ const PlantDetails = () => {
   const backButtonName = location.state?.buttonName;
 
   useEffect(() => {
-    fetch(`http://localhost:3000/plant/${id}`)
+    fetch(`https://plant-care-tracker-server-black.vercel.app/plant/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setPlant(data);

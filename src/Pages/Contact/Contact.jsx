@@ -27,7 +27,7 @@ const Contact = () => {
   const handleSubmit = (e) => {
     setProssesing(true);
     e.preventDefault();
-    fetch("http://localhost:3000/contact-info", {
+    fetch("https://plant-care-tracker-server-black.vercel.app/contact-info", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

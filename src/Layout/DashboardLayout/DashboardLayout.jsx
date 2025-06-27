@@ -1,36 +1,39 @@
-import React, { useState } from "react";
-import { Outlet } from "react-router";
+import React from "react";
+import { Link, Outlet } from "react-router";
 import DashboardSidebar from "../../Pages/Dashboard/DashboardSidebar";
-import { FiMenu } from "react-icons/fi";
+import { FiMenu, FiX } from "react-icons/fi";
+import Footer from "../../Components/Footer/Footer";
 
 const DashboardLayout = () => {
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-    return (
-      <div className="min-h-screen lg:flex">
-        {/* Drawer Toggle Button for Small Devices */}
-        <div className="bg-[#22702d] text-white p-4 lg:hidden flex items-center justify-between">
-          <h2 className="text-xl font-bold">Dashboard</h2>
-          <button onClick={() => setIsDrawerOpen(!isDrawerOpen)}>
+  return (
+    <div className="drawer lg:drawer-open">
+      <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+      <div className="drawer-content w-full">
+        {/* Page content here */}
+        <div className="bg-[#22702d] px-4 py-2 w-full flex items-center justify-between lg:hidden">
+          <Link to="/" className="text-2xl font-bold text-white">
+            Dashboard
+          </Link>
+          <label htmlFor="my-drawer-2" className="text-white">
             <FiMenu size={24} />
-          </button>
+          </label>
         </div>
-
-        {/* Sidebar */}
-        <div
-          className={`fixed z-40 top-0 left-0 h-screen w-64 bg-white shadow-lg transform transition-transform duration-300 lg:static lg:translate-x-0 ${
-            isDrawerOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          <DashboardSidebar closeDrawer={() => setIsDrawerOpen(false)} />
-        </div>
-
-        {/* Main Content */}
-        <main className="flex-1 p-4 mt-4 lg:mt-0">
+        <div className="p-4 md:p-6 lg:px-12">
           <Outlet />
-        </main>
+        </div>
       </div>
-    );
+      <div className="drawer-side">
+        <label
+          htmlFor="my-drawer-2"
+          aria-label="close sidebar"
+          className="drawer-overlay"
+        ></label>
+        <ul className="menu bg-base-200 text-base-content min-h-screen w-64 p-0">
+          <DashboardSidebar />
+        </ul>
+      </div>
+    </div>
+  );
 };
 
 export default DashboardLayout;

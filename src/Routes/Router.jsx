@@ -6,6 +6,7 @@ import AllPlants from "../Pages/AllPlants/AllPlants";
 import AddPlants from "../Pages/AddPlants/AddPlants";
 import Myplants from "../Pages/Myplants/Myplants";
 import Register from "../Pages/Register/Register";
+import SignUp from "../Pages/Register/SignUp";
 import Login from "../Pages/Login/Login";
 import PlantDetails from "../Pages/PlantDetails/PlantDetails";
 import Private from "../private/Private";
@@ -15,6 +16,7 @@ import About from "../Pages/About/About";
 import Contact from "../Pages/Contact/Contact";
 import Dashboard from "../Pages/Dashboard/Dashboard";
 import DashboardLayout from "../Layout/DashboardLayout/DashboardLayout";
+import Profile from "../Pages/Profile/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -24,7 +26,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        loader: () => fetch("http://localhost:3000/newplants"),
+        loader: () => fetch("https://plant-care-tracker-server-black.vercel.app/newplants"),
         id: "newplants",
         hydrateFallbackElement: <Loader />,
         Component: Home,
@@ -47,7 +49,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/register",
-        Component: Register,
+        Component: SignUp,
       },
       {
         path: "/login",
@@ -69,19 +71,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "addplants",
-        element: (
-          <Private>
-            <AddPlants />
-          </Private>
-        ),
+        Component: AddPlants
       },
       {
         path: "myplants",
-        element: (
-          <Private>
-            <Myplants />
-          </Private>
-        ),
+        Component: Myplants 
+      },
+      {
+        path: "profile",
+        Component: Profile 
       },
       {
         path: "/update/:id",
