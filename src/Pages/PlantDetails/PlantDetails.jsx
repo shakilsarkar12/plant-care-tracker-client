@@ -198,7 +198,7 @@ const PlantDetails = () => {
                 to={fromPage? fromPage : "/"}
                 className="btn w-full bg-green-600 hover:bg-green-700 px-0 text-white py-2 rounded-lg transition"
               >
-                {backButtonName? backButtonName : "Back To Home"}
+                {backButtonName? backButtonName : "Back"}
               </Link>
               <Tooltip
                 id="back-tooltip"

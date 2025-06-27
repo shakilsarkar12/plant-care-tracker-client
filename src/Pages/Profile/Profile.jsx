@@ -121,7 +121,7 @@ const Profile = () => {
       </h2>
 
       {/* Profile Info */}
-      <div className="bg-white shadow-md border border-[#77eeb5] rounded-lg p-6 flex flex-col sm:flex-row items-center gap-6">
+      <div className="bg-base-100 shadow-md border border-[#22702d] rounded-lg p-6 flex flex-col sm:flex-row items-center gap-6">
         <div className="w-24 md:w-32 h-24 md:h-32 rounded-full overflow-hidden border-4 border-green-300">
           <img
             src={
@@ -163,7 +163,10 @@ const Profile = () => {
             >
               <FaEdit /> Edit Profile
             </button>
-            <button onClick={handlePasswordReset} className="btn btn-xs sm:btn-sm bg-yellow-500 hover:bg-yellow-600 text-white">
+            <button
+              onClick={handlePasswordReset}
+              className="btn btn-xs sm:btn-sm bg-yellow-500 hover:bg-yellow-600 text-white"
+            >
               <FaLock /> Change Password
             </button>
           </div>
@@ -180,7 +183,7 @@ const Profile = () => {
             {myPlants.slice(0, 3).map((plant) => (
               <div
                 key={plant._id}
-                className="border border-green-200 rounded-md shadow-sm p-3"
+                className="border border-[#22702d] rounded-md shadow-sm p-3"
               >
                 <img
                   src={plant.image}

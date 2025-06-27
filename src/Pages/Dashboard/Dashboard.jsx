@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import {
   FiUser,
   FiPlusCircle,
@@ -10,6 +10,9 @@ import {
   FiDroplet,
   FiClock,
 } from "react-icons/fi";
+import Loader from "../../Components/Loader/Loader";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import SummaryCard from "./SummaryCard";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -18,6 +21,9 @@ const Dashboard = () => {
   const [feedbackCount, setFeedbackCount] = useState(0);
   const [plants, setPlants] = useState([]);
   const [alerts, setAlerts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [upcomingPlants, setUpcomingPlants] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
     fetch("https://plant-care-tracker-server-black.vercel.app/dashboard-stats")
@@ -29,6 +35,7 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
+    if (!user?.email) return;
     fetch(
       `https://plant-care-tracker-server-black.vercel.app/myplants/${user?.email}`
     )
@@ -36,6 +43,7 @@ const Dashboard = () => {
       .then((data) => {
         setPlants(data);
         generateAlerts(data);
+        setLoading(false);
       });
   }, [user]);
 
@@ -44,21 +52,18 @@ const Dashboard = () => {
     let newAlerts = [];
 
     plants.forEach((plant) => {
-      const nextWaterDate = new Date(plant.nextWateringDate);
-      const lastWaterDate = new Date(plant.lastWateredDate);
-      const daysSinceWatered = (today - lastWaterDate) / (1000 * 60 * 60 * 24);
+      const nextWaterDate = new Date(plant.nextWatering);
+      const lastWaterDate = new Date(plant.lastWatered);
       const daysToNextWater = (nextWaterDate - today) / (1000 * 60 * 60 * 24);
 
-      if (plant.healthStatus !== "healthy") {
-        newAlerts.push(`⚠️ Your plant "${plant.name}" looks unhealthy.`);
+      if (plant.healthStatus !== "healthey") {
+        newAlerts.push(`⚠️ ${plant.plantName} looks unhealthy.`);
       }
       if (daysToNextWater < 0) {
-        newAlerts.push(`💧 You missed watering "${plant.name}".`);
+        newAlerts.push(`💧 Missed watering ${plant.plantName}.`);
       } else if (daysToNextWater <= 2) {
         newAlerts.push(
-          `💧 Water "${plant.name}" within ${Math.ceil(
-            daysToNextWater
-          )} day(s).`
+          `💧 Water ${plant.plantName} in ${Math.ceil(daysToNextWater)} day(s).`
         );
       }
     });
@@ -67,164 +72,187 @@ const Dashboard = () => {
   };
 
   const healthyCount = plants.filter(
-    (p) => p.healthStatus === "healthy"
+    (p) => p.healthStatus === "healthey"
   ).length;
   const unhealthyCount = plants.length - healthyCount;
 
-  const upcomingPlants = plants.filter((plant) => {
-    const nextWater = new Date(plant.nextWateringDate);
-    const today = new Date();
-    const diffDays = (nextWater - today) / (1000 * 60 * 60 * 24);
-    return diffDays >= 0 && diffDays <= 3;
-  });
+  useEffect(() => {
+    fetch(`http://localhost:3000/upcoming-plants/${user?.email}`)
+      .then((res) => res.json())
+      .then((data) => setUpcomingPlants(data))
+      .catch((err) => console.error("Failed to load upcoming plants", err));
+  }, [user]);
 
   const recentlyAdded = [...plants]
     .sort((a, b) => new Date(b.addedDate) - new Date(a.addedDate))
     .slice(0, 5);
 
+  const pieData = [
+    { name: "Healthy", value: healthyCount },
+    { name: "Unhealthy", value: unhealthyCount },
+  ];
+  const COLORS = ["#16a34a", "#dc2626"];
+
+  if (loading) return <Loader />;
+
   return (
-    <div className="max-w-7xl mx-auto px-4  py-14">
+    <div className="max-w-7xl mx-auto px-4 py-14">
       <h1 className="text-4xl font-extrabold text-green-800 mb-14 text-center drop-shadow-md">
-        🌿 Plant Care Tracker Dashboard
+        🌿 Dashboard Overview
       </h1>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-16">
+      {/* Summary */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-12">
         {/* User Info */}
-        <div className="bg-white rounded-3xl shadow-xl border border-green-200 p-6 flex items-center gap-5 hover:shadow-2xl transition-shadow duration-300">
-          <FiUser size={36} className="text-green-700" />
-          <div>
-            <h2 className="text-xl font-semibold text-gray-800">
-              Logged-in User
-            </h2>
-            <p className="text-gray-600 text-base">
-              {user?.displayName || "No Name"}
-            </p>
-            <p className="text-gray-500 text-sm">{user?.email}</p>
-          </div>
-        </div>
-
-        {/* Total Plants */}
-        <div className="bg-white rounded-3xl shadow-xl border border-green-200 p-6 flex items-center gap-5 hover:shadow-2xl transition-shadow duration-300">
-          <FiLayers size={36} className="text-green-700" />
-          <div>
-            <h2 className="text-xl font-semibold text-gray-800">
-              Total Plants
-            </h2>
-            <p className="text-4xl font-bold text-green-700">{plantCount}</p>
-          </div>
-        </div>
-
-        {/* Feedbacks */}
-        <div className="bg-white rounded-3xl shadow-xl border border-green-200 p-6 flex items-center gap-5 hover:shadow-2xl transition-shadow duration-300">
-          <FiMessageSquare size={36} className="text-green-700" />
-          <div>
-            <h2 className="text-xl font-semibold text-gray-800">Feedbacks</h2>
-            <p className="text-4xl font-bold text-green-700">{feedbackCount}</p>
-          </div>
-        </div>
+        <SummaryCard
+          icon={<FiUser size={36} />}
+          title="Logged-in User"
+          subtitle={user?.displayName}
+          note={user?.email}
+        />
+        <SummaryCard
+          icon={<FiLayers size={36} />}
+          title="Total Plants"
+          subtitle={plantCount}
+        />
+        <SummaryCard
+          icon={<FiMessageSquare size={36} />}
+          title="Feedbacks"
+          subtitle={feedbackCount}
+        />
       </div>
 
-      {/* Plant Health Summary */}
-      <section className="bg-white rounded-3xl shadow-xl border border-green-200 p-6 mb-14 hover:shadow-2xl transition-shadow duration-300">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-          🌱 Plant Health Summary
+      {/* Plant Health Pie Chart */}
+      <section className="bg-base-100 rounded-xl border border-[#22702d] p-6 mb-14">
+        <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
+          🌱 Plant Health Distribution
         </h3>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <p className="text-lg text-gray-700">
-            Healthy Plants:{" "}
-            <span className="font-bold text-green-600">{healthyCount}</span>
-          </p>
-          <p className="text-lg text-gray-700">
-            Unhealthy Plants:{" "}
-            <span className="font-bold text-red-600">{unhealthyCount}</span>
-          </p>
-          <div className="w-full sm:w-1/3 bg-gray-300 rounded-full h-6 overflow-hidden shadow-inner">
-            <div
-              className="bg-green-600 h-6 transition-all duration-500"
-              style={{
-                width:
-                  plants.length === 0
-                    ? "0%"
-                    : `${(healthyCount / plants.length) * 100}%`,
-              }}
-              aria-label="Percentage of healthy plants"
-            />
-          </div>
-        </div>
+        <ResponsiveContainer width="100%" height={250}>
+          <PieChart>
+            <Pie
+              data={pieData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              label
+            >
+              {pieData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </ResponsiveContainer>
       </section>
 
-      {/* Upcoming Watering Reminders */}
-      <section className="bg-white rounded-3xl shadow-xl border border-green-200 p-6 mb-14 hover:shadow-2xl transition-shadow duration-300">
+      {/* Alerts */}
+      <section className="bg-base-100 rounded-xl border border-[#22702d] p-6 mb-14">
         <h3 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center gap-3">
-          <FiDroplet className="text-green-600" size={26} />
-          Upcoming Watering Reminders
+          <FiAlertCircle className="text-red-600" size={26} /> Notifications
         </h3>
-        {upcomingPlants.length === 0 ? (
-          <p className="text-gray-600">No plants need watering soon.</p>
+        {alerts.length === 0 ? (
+          <p className="text-gray-600">No alerts</p>
         ) : (
-          <ul className="list-disc list-inside text-gray-700 space-y-2">
-            {upcomingPlants.map((plant) => (
-              <li
-                key={plant._id}
-                className="hover:bg-green-50 rounded px-2 py-1 transition"
-              >
-                <span className="font-semibold">{plant.name}</span> - Water by{" "}
-                {new Date(plant.nextWateringDate).toLocaleDateString()}
-              </li>
+          <ul className="list-disc pl-5 text-red-700 font-medium space-y-2">
+            {alerts.slice(0, 5).map((alert, idx) => (
+              <li key={idx}>{alert}</li>
             ))}
           </ul>
         )}
       </section>
 
-      {/* Recently Added Plants */}
-      <section className="bg-white rounded-3xl shadow-xl border border-green-200 p-6 mb-14 hover:shadow-2xl transition-shadow duration-300">
+      {/* Upcoming Watering Reminders */}
+      <section className="bg-base-100 rounded-xl border border-[#22702d] p-6 mb-14">
         <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-3">
-          <FiClock className="text-green-600" size={26} />
-          Recently Added Plants
+          <FiDroplet className="text-green-600" size={26} />
+          Upcoming Watering Reminders
+        </h3>
+
+        {upcomingPlants.length === 0 ? (
+          <p className="text-gray-600">
+            No plants need watering within next 3 days.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {upcomingPlants.map((plant) => (
+              <Link
+                state={{ fromPage: location.pathname }}
+                to={`/plantdetails/${plant._id}`}
+              >
+                <div
+                  key={plant._id}
+                  className="  rounded-xl p-4 shadow hover:shadow-md transition"
+                >
+                  <img
+                    src={plant.image}
+                    alt={plant.plantName}
+                    className="w-full h-36 object-cover rounded-lg mb-3"
+                  />
+                  <h4 className="text-lg font-bold text-green-700 mb-1">
+                    {plant.plantName}
+                  </h4>
+                  <p className="text-sm text-gray-700 mb-1">
+                    Category:{" "}
+                    <span className="font-medium">{plant.category}</span>
+                  </p>
+                  <p className="text-sm text-gray-700 mb-1">
+                    Watering:{" "}
+                    <span className="font-medium">
+                      {plant.wateringFrequency}
+                    </span>
+                  </p>
+                  <p className="text-sm text-green-800 font-semibold mt-2 flex items-center gap-2">
+                    <FiDroplet className="text-green-500" />
+                    Water by:{" "}
+                    {new Date(plant.nextWatering).toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Recently Added */}
+      <section className="bg-base-100 rounded-xl border border-[#22702d] p-6 mb-14">
+        <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-3">
+          <FiClock className="text-green-600" size={26} /> Recently Added Plants
         </h3>
         {recentlyAdded.length === 0 ? (
           <p className="text-gray-600">No recent plants added.</p>
         ) : (
-          <ul className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {recentlyAdded.map((plant) => (
-              <li
-                key={plant._id}
-                className="flex items-center gap-5 hover:bg-green-50 rounded p-3 transition"
+              <Link
+                state={{ fromPage: location.pathname }}
+                to={`/plantdetails/${plant._id}`}
               >
-                <img
-                  src={plant.image}
-                  alt={plant.name}
-                  className="w-20 h-20 rounded-xl object-cover border border-green-200 shadow-sm"
-                />
-                <div>
-                  <p className="text-lg font-semibold text-gray-800">
+                <div
+                  key={plant._id}
+                  className="rounded-xl   shadow hover:shadow-lg p-3"
+                >
+                  <img
+                    src={plant.image}
+                    alt={plant.name}
+                    className="w-full h-40 object-cover rounded-lg"
+                  />
+                  <h4 className="text-lg font-bold text-green-800 mt-2">
                     {plant.name}
-                  </p>
-                  <p className="text-sm text-green-700 font-medium">
-                    {plant.category}
-                  </p>
+                  </h4>
+                  <p className="text-sm text-gray-500">{plant.category}</p>
                 </div>
-              </li>
+              </Link>
             ))}
-          </ul>
-        )}
-      </section>
-
-      {/* Notifications */}
-      <section className="bg-white rounded-3xl shadow-xl border border-green-200 p-6 mb-14 hover:shadow-2xl transition-shadow duration-300">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center gap-3">
-          <FiAlertCircle className="text-red-600" size={26} />
-          Notifications
-        </h3>
-        {alerts.length === 0 ? (
-          <p className="text-gray-600">No new notifications</p>
-        ) : (
-          <ul className="list-disc list-inside text-red-700 font-semibold space-y-2">
-            {alerts.map((alert, idx) => (
-              <li key={idx}>{alert}</li>
-            ))}
-          </ul>
+          </div>
         )}
       </section>
 
@@ -232,15 +260,14 @@ const Dashboard = () => {
       <div className="flex flex-col sm:flex-row justify-center gap-6">
         <Link
           to="/addplants"
-          className="flex items-center justify-center gap-3 bg-green-700 hover:bg-green-800 transition-colors text-white font-semibold text-lg rounded-3xl px-8 py-4 shadow-lg shadow-green-400/30"
+          className="flex items-center justify-center gap-3 bg-green-700 hover:bg-green-800 text-white font-semibold text-lg rounded-md px-4 py-2 shadow-lg"
         >
-          <FiPlusCircle size={24} />
-          Add New Plant
+          <FiPlusCircle size={24} /> Add New Plant
         </Link>
 
         <Link
           to="/allplants"
-          className="flex items-center justify-center gap-3 border-2 border-green-700 hover:bg-green-700 hover:text-white transition-colors text-green-700 font-semibold text-lg rounded-3xl px-8 py-4 shadow-md"
+          className="flex items-center justify-center gap-3 border-2 border-green-700 hover:bg-green-700 hover:text-white text-green-700 font-semibold text-lg rounded-md px-4 py-2 shadow-md"
         >
           🌿 View All Plants
         </Link>
