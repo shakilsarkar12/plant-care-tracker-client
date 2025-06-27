@@ -26,7 +26,7 @@ const features = [
 
 const WhyChooseUs = () => {
   return (
-    <section className="">
+    <section className="my-12">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-green-700 text-center mb-10">
           Why Choose Plant Care Tracker?

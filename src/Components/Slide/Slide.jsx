@@ -4,7 +4,7 @@ import { Link } from "react-router";
 const Slide = ({ bgImage, header, desc, btnName, link }) => {
   return (
     <div
-      className="h-[35vh] sm:h-[45vh] md:h-[h-70vh] bg-cover bg-center flex items-center rounded-md text-shadow text-white relative"
+      className="h-[35vh] sm:h-[45vh] md:h-[h-70vh] bg-cover bg-center flex items-center rounded-lg text-shadow text-white relative overflow-hidden"
       style={{
         backgroundImage: `url(${bgImage})`,
       }}
