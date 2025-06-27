@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../Context/AuthContext/AuthContext";
+import React, { useEffect, useState } from "react";
 import { LuUser, LuMail, LuLeaf } from "react-icons/lu";
 import { FaCalendarAlt, FaEdit, FaLock } from "react-icons/fa";
 import EditProfileModal from "./EditProfileModal";
@@ -7,9 +6,11 @@ import Loader from "../../Components/Loader/Loader";
 import { updateProfile } from "firebase/auth";
 import { auth } from "../../Firebase/firebase.init";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import useAuth from "../../Hooks/useAuth";
 
 const Profile = () => {
-  const { user } = useContext(AuthContext);
+  const { user, handleAutoLogout, resetPassword } = useAuth();
   const [myPlants, setMyPlants] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -58,7 +59,7 @@ const Profile = () => {
         });
       }
 
-      const res = await fetch(`http://localhost:3000/users/${user.email}`, {
+      const res = await fetch(`https://plant-care-tracker-server-black.vercel.app/users/${user.email}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -85,6 +86,34 @@ const Profile = () => {
     }
   };
 
+    const handlePasswordReset =  () => {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be Reset your Password!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#22702d",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, Reset",
+        }).then( async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await resetPassword(user.email);
+                    toast.success("Password reset email sent! Check your inbox.");
+                  } catch (error) {
+                    console.error("Password reset error:", error);
+                    toast.error("Failed to send password reset email.");
+                  }
+            Swal.fire({
+              title: "Sent !",
+              text: "Password reset email has been sent. check your email",
+              icon: "success",
+            });
+            handleAutoLogout()
+          }
+        });
+    }
+    
   return (
     <div className="max-w-4xl mx-auto py-10">
       <h2 className="text-3xl font-bold text-center text-[#22702d] mb-8">
@@ -134,7 +163,7 @@ const Profile = () => {
             >
               <FaEdit /> Edit Profile
             </button>
-            <button className="btn btn-xs sm:btn-sm bg-yellow-500 hover:bg-yellow-600 text-white">
+            <button onClick={handlePasswordReset} className="btn btn-xs sm:btn-sm bg-yellow-500 hover:bg-yellow-600 text-white">
               <FaLock /> Change Password
             </button>
           </div>
