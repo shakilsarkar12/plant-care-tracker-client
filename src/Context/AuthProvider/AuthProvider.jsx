@@ -61,9 +61,7 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-        fetch(
-          `https://plant-care-tracker-server-black.vercel.app/user/${currentUser.email}`
-        )
+        fetch(`https://plant-care-tracker-server-black.vercel.app/user/${currentUser?.email}`)
           .then((res) => res.json())
           .then((data) => {
             setUser(data);

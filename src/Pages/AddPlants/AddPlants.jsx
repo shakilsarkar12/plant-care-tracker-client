@@ -20,6 +20,7 @@ import { FiMail } from "react-icons/fi";
 const AddPlants = () => {
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
+  const [prosses, setProsses] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [selectedGalleryImage, setSelectedGalleryImage] = useState(null);
 
@@ -31,6 +32,7 @@ const AddPlants = () => {
   }, []);
 
   const handleSubmit = async (e) => {
+    setProsses(true)
     e.preventDefault();
     const form = e.target;
 
@@ -90,11 +92,11 @@ const AddPlants = () => {
         Swal.fire("Success!", "Plant added successfully!", "success");
         form.reset();
         setImageFile(null);
+        setProsses(false)
         setSelectedGalleryImage(null);
       }
     } catch (error) {
-      console.error("Submit error:", error);
-      Swal.fire("Error!", "Something went wrong.", "error");
+      Swal.fire("Error!", "Something went wrong.", error);
     }
   };
 
@@ -143,6 +145,7 @@ const AddPlants = () => {
           </div>
 
           {/* Image File Upload with Preview Only */}
+
           <div className="relative">
             <div>
               <label className="block mb-1 text-sm font-medium text-green-800">
@@ -334,9 +337,14 @@ const AddPlants = () => {
         <div className="text-center mt-8">
           <button
             type="submit"
+            disabled={prosses}
             className="btn w-full bg-[#22702d] text-white hover:bg-green-800 px-8 py-2"
           >
-            Add Plant
+            {prosses ? (
+              <span className="loading loading-spinner text-primary"></span>
+            ) : (
+              "Add Plant"
+            )}
           </button>
         </div>
       </form>

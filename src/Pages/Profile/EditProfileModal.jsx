@@ -1,6 +1,7 @@
 // Update in EditProfileModal.jsx
 import React, { useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 const EditProfileModal = ({ user, isOpen, onClose, onSave, prosesing }) => {
   const [name, setName] = useState(user?.displayName || "");
@@ -47,7 +48,7 @@ const EditProfileModal = ({ user, isOpen, onClose, onSave, prosesing }) => {
           imageURL = data.data.url;
         }
       } catch (error) {
-        console.error("Image upload failed", error);
+        toast.error("Image upload failed", error);
       }
     }
 

@@ -84,12 +84,12 @@ const SignUp = () => {
               });
           })
           .catch((error) => {
-            console.error("Profile Update Error:", error);
+            toast.error("Profile Update Error:", error);
             setRegLoading(false);
           });
       })
       .catch((err) => {
-        console.error("User Creation Error:", err);
+        toast.error("User Creation Error:", err);
         toast.error("Account Creation Failed!");
         setRegLoading(false);
       });

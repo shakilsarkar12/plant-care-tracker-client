@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const generateLetterAvatar = (letter) => {
   const canvas = document.createElement("canvas");
@@ -25,10 +26,9 @@ const uploadImageToImgbb = async (base64Data) => {
       `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_imgbbApiKey}`,
       formData
     );
-    console.log("ImgBB Response:", response.data);
     return response.data.data.url;
   } catch (error) {
-    console.error("Image upload error:", error);
+    toast.error("Image upload error:", error);
     return null;
   }
 };

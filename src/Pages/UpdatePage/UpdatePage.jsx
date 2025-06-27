@@ -21,12 +21,16 @@ import { FaLeaf } from "react-icons/fa";
 
 const UpdatePage = () => {
   const [loading, setLoading] = useState(true);
+  const [prosses, setProsses] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const data = useLoaderData();
   const [plant, setPlant] = useState(data);
   const { user } = useContext(AuthContext);
-  
+  const [imageFile, setImageFile] = useState(null);
+  const [selectedGalleryImage, setSelectedGalleryImage] = useState(null);
+  const imgbbApiKey = import.meta.env.VITE_imgbbApiKey;
+
   const fromPage = location.state;
 
   useEffect(() => {
@@ -39,11 +43,40 @@ const UpdatePage = () => {
 
   if (loading) return <Loader />;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    setProsses(true);
     e.preventDefault();
     const form = e.target;
+
+    let imageUrl = "";
+
+    if (imageFile) {
+      const formData = new FormData();
+      formData.append("image", imageFile);
+
+      try {
+        const uploadRes = await fetch(
+          `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const uploadData = await uploadRes.json();
+        imageUrl = uploadData.data.url;
+      } catch (err) {
+        console.log(err);
+        return Swal.fire("Error", "Image upload failed", "error");
+      }
+    } else if (selectedGalleryImage) {
+      imageUrl = selectedGalleryImage;
+    } else {
+      imageUrl = plant.image;
+    }
+
     const updatePlant = {
-      image: form.image.value,
+      image: imageUrl,
       plantName: form.plantName.value,
       category: form.category.value,
       careLevel: form.careLevel.value,
@@ -73,6 +106,7 @@ const UpdatePage = () => {
     const isDataSame = _.isEqual(originalDataSubset, updatePlant);
 
     if (isDataSame) {
+      setProsses(false)
       Swal.fire({
         icon: "info",
         title: "No Changes Detected",
@@ -94,9 +128,10 @@ const UpdatePage = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        if (data) {
+        if (data?.modifiedCount > 0) {
           setPlant(data);
           navigate(fromPage || "/myplants");
+          setProsses(false);
           Swal.fire({
             title: "Success!",
             text: "Plant Update successful!",
@@ -127,7 +162,6 @@ const UpdatePage = () => {
                 readOnly={true}
                 value={user?.displayName}
                 placeholder="Your Name"
-                required
                 className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
               />
             </div>
@@ -146,28 +180,49 @@ const UpdatePage = () => {
                 readOnly={true}
                 value={user?.email}
                 placeholder="Your Email"
-                required
                 className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
               />
             </div>
           </div>
 
           {/* Image URL */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-green-800">
-              Image URL
-            </label>
-            <div className="relative">
-              <LuImage className="absolute top-3 left-3 z-10 text-green-700" />
-              <input
-                type="text"
-                name="image"
-                placeholder="Image URL"
-                defaultValue={plant.image}
-                required
-                className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
-              />
+          <div className="relative">
+            <div>
+              <label className="block mb-1 text-sm font-medium text-green-800">
+                Plant Image
+              </label>
+              <div className="relative">
+                <LuImage className="absolute top-3 left-3 z-10 text-green-700" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImageFile(e.target.files[0])}
+
+                  className="input w-full border border-[#22702d] bg-transparent focus:outline-none px-10 pt-2"
+                />
+              </div>
             </div>
+
+            {/* Show preview if image selected */}
+            {imageFile && (
+              <div className="absolute bottom-0.5 right-0.5">
+                <img
+                  src={URL.createObjectURL(imageFile) || plant?.image}
+                  alt="Selected"
+                  className="w-10 h-9 object-cover rounded-md"
+                />
+              </div>
+            )}
+
+            {!imageFile && (
+              <div className="absolute bottom-0.5 right-0.5">
+                <img
+                  src={plant?.image}
+                  alt="Selected"
+                  className="w-10 h-9 object-cover rounded-md"
+                />
+              </div>
+            )}
           </div>
 
           {/* Plant Name */}
@@ -182,7 +237,6 @@ const UpdatePage = () => {
                 name="plantName"
                 placeholder="Plant Name"
                 defaultValue={plant.plantName}
-                required
                 className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
               />
             </div>
@@ -198,7 +252,6 @@ const UpdatePage = () => {
               <select
                 defaultValue={plant.category}
                 name="category"
-                required
                 className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
               >
                 <option disabled={true}>Select Category</option>
@@ -225,7 +278,6 @@ const UpdatePage = () => {
               <select
                 defaultValue={plant.careLevel}
                 name="careLevel"
-                required
                 className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
               >
                 <option disabled={true}>Select Care Level</option>
@@ -254,7 +306,6 @@ const UpdatePage = () => {
                 name="wateringFrequency"
                 placeholder="e.g. Every 3 days"
                 defaultValue={plant.wateringFrequency}
-                required
                 className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
               />
             </div>
@@ -271,7 +322,6 @@ const UpdatePage = () => {
                 type="date"
                 name="lastWatered"
                 defaultValue={plant.lastWatered}
-                required
                 className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
               />
             </div>
@@ -288,7 +338,6 @@ const UpdatePage = () => {
                 type="date"
                 name="nextWatering"
                 defaultValue={plant.nextWatering}
-                required
                 className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
               />
             </div>
@@ -306,7 +355,6 @@ const UpdatePage = () => {
                 name="healthStatus"
                 placeholder="Health Status"
                 defaultValue={plant.healthStatus}
-                required
                 className="input w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10"
               />
             </div>
@@ -323,7 +371,6 @@ const UpdatePage = () => {
                 name="description"
                 placeholder="Description"
                 defaultValue={plant.description}
-                required
                 className="textarea w-full border border-[#22702d] bg-transparent focus:outline-none focus:shadow-[0_0_5px_#22702d] pl-10 pt-3"
                 rows="4"
               />
@@ -334,16 +381,20 @@ const UpdatePage = () => {
         <div className="w-full text-center mt-8 flex gap-4">
           <Link
             to="/myplants"
-            type="button"
             className="btn w-[calc(50%-8px)] bg-red-500 text-white hover:bg-red-600 px-8 py-2"
           >
+            
             Cancel
           </Link>
           <button
             type="submit"
             className="btn w-[calc(50%-8px)] bg-[#22702d] text-white hover:bg-green-800 px-8 py-2"
           >
-            Update
+            {prosses ? (
+              <span className="loading loading-spinner text-primary"></span>
+            ) : (
+              "Update"
+            )}
           </button>
         </div>
       </form>

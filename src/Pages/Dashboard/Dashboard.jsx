@@ -13,6 +13,7 @@ import {
 import Loader from "../../Components/Loader/Loader";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import SummaryCard from "./SummaryCard";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -80,7 +81,7 @@ const Dashboard = () => {
     fetch(`https://plant-care-tracker-server-black.vercel.app/upcoming-plants/${user?.email}`)
       .then((res) => res.json())
       .then((data) => setUpcomingPlants(data))
-      .catch((err) => console.error("Failed to load upcoming plants", err));
+      .catch((err) => toast.error("Failed to load upcoming plants", err));
   }, [user]);
 
   const recentlyAdded = [...plants]
@@ -123,8 +124,8 @@ const Dashboard = () => {
       </div>
 
       {/* Plant Health Pie Chart */}
-      <section className="bg-base-100 rounded-xl border border-[#22702d] p-6 mb-14">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
+      <section className="bg-base-200 rounded-xl p-6 mb-14">
+        <h3 className="text-2xl font-semibold text-base-400 mb-6 text-center">
           🌱 Plant Health Distribution
         </h3>
         <ResponsiveContainer width="100%" height={250}>
@@ -151,12 +152,12 @@ const Dashboard = () => {
       </section>
 
       {/* Alerts */}
-      <section className="bg-base-100 rounded-xl border border-[#22702d] p-6 mb-14">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center gap-3">
+      <section className="bg-base-200 rounded-xl p-6 mb-14">
+        <h3 className="text-2xl font-semibold text-base-400 mb-4 flex items-center gap-3">
           <FiAlertCircle className="text-red-600" size={26} /> Notifications
         </h3>
         {alerts.length === 0 ? (
-          <p className="text-gray-600">No alerts</p>
+          <p className="text-base-600">No alerts</p>
         ) : (
           <ul className="list-disc pl-5 text-red-700 font-medium space-y-2">
             {alerts.slice(0, 5).map((alert, idx) => (
@@ -167,14 +168,14 @@ const Dashboard = () => {
       </section>
 
       {/* Upcoming Watering Reminders */}
-      <section className="bg-base-100 rounded-xl border border-[#22702d] p-6 mb-14">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-3">
+      <section className="bg-base-200 rounded-xl p-6 mb-14">
+        <h3 className="text-2xl font-semibold text-base-400 mb-6 flex items-center gap-3">
           <FiDroplet className="text-green-600" size={26} />
           Upcoming Watering Reminders
         </h3>
 
         {upcomingPlants.length === 0 ? (
-          <p className="text-gray-600">
+          <p className="text-base-600">
             No plants need watering within next 3 days.
           </p>
         ) : (
@@ -186,28 +187,28 @@ const Dashboard = () => {
               >
                 <div
                   key={plant._id}
-                  className="  rounded-xl p-4 shadow hover:shadow-md transition"
+                  className="  rounded-xl p-4 bg-base-200 shadow hover:shadow-md transition"
                 >
                   <img
                     src={plant.image}
                     alt={plant.plantName}
                     className="w-full h-36 object-cover rounded-lg mb-3"
                   />
-                  <h4 className="text-lg font-bold text-green-700 mb-1">
+                  <h4 className="text-lg font-bold text-base-400 mb-1">
                     {plant.plantName}
                   </h4>
-                  <p className="text-sm text-gray-700 mb-1">
+                  <p className="text-sm text-base-400 mb-1">
                     Category:{" "}
                     <span className="font-medium">{plant.category}</span>
                   </p>
-                  <p className="text-sm text-gray-700 mb-1">
+                  <p className="text-sm text-base-400 mb-1">
                     Watering:{" "}
                     <span className="font-medium">
                       {plant.wateringFrequency}
                     </span>
                   </p>
-                  <p className="text-sm text-green-800 font-semibold mt-2 flex items-center gap-2">
-                    <FiDroplet className="text-green-500" />
+                  <p className="text-sm text-base-400 font-semibold mt-2 flex items-center gap-2">
+                    <FiDroplet className="text-base-400" />
                     Water by:{" "}
                     {new Date(plant.nextWatering).toLocaleDateString("en-GB", {
                       day: "numeric",
@@ -223,12 +224,12 @@ const Dashboard = () => {
       </section>
 
       {/* Recently Added */}
-      <section className="bg-base-100 rounded-xl border border-[#22702d] p-6 mb-14">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-3">
+      <section className="bg-base-200 rounded-xl p-6 mb-14">
+        <h3 className="text-2xl font-semibold text-base-900 mb-6 flex items-center gap-3">
           <FiClock className="text-green-600" size={26} /> Recently Added Plants
         </h3>
         {recentlyAdded.length === 0 ? (
-          <p className="text-gray-600">No recent plants added.</p>
+          <p className="text-base-600">No recent plants added.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {recentlyAdded.map((plant) => (
@@ -238,7 +239,7 @@ const Dashboard = () => {
               >
                 <div
                   key={plant._id}
-                  className="rounded-xl   shadow hover:shadow-lg p-3"
+                  className="rounded-xl bg-base-100  shadow hover:shadow-lg p-3"
                 >
                   <img
                     src={plant.image}
@@ -248,7 +249,7 @@ const Dashboard = () => {
                   <h4 className="text-lg font-bold text-green-800 mt-2">
                     {plant.name}
                   </h4>
-                  <p className="text-sm text-gray-500">{plant.category}</p>
+                  <p className="text-sm text-base-500">{plant.category}</p>
                 </div>
               </Link>
             ))}

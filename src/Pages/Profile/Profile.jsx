@@ -29,7 +29,7 @@ const Profile = () => {
           setMyPlants(data.reverse());
           setLoading(false);
         })
-        .catch((err) => console.error("Failed to load plants", err));
+        .catch((err) => toast.error("Failed to load plants", err));
     }
   }, [user?.email]);
 
@@ -79,7 +79,7 @@ const Profile = () => {
         toast.info("No changes made.");
       }
     } catch (err) {
-      console.error(" Failed to update profile", err);
+      toast.error(" Failed to update profile", err);
       toast.error("Something went wrong.");
     } finally {
       setProsesing(false);
@@ -101,7 +101,7 @@ const Profile = () => {
                     await resetPassword(user.email);
                     toast.success("Password reset email sent! Check your inbox.");
                   } catch (error) {
-                    console.error("Password reset error:", error);
+                    toast.error("Password reset error:", error);
                     toast.error("Failed to send password reset email.");
                   }
             Swal.fire({

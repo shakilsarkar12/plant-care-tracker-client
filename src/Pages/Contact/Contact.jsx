@@ -45,8 +45,7 @@ const Contact = () => {
             setProssesing(false)
         }
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
         toast.error("Something went wrong!");
       });
   };
@@ -116,10 +115,11 @@ const Contact = () => {
 
         <button
           type="submit"
+          disabled={prossesing}
           className="btn bg-[#22702d] hover:bg-[#1a5a25] text-white font-semibold w-full"
         >
           {prossesing ? (
-            <span className="loading loading-spinner loading-md"></span>
+            <span className="loading loading-spinner loading-md text-green-800"></span>
           ) : (
             "Send Message"
           )}

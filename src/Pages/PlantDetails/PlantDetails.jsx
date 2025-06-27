@@ -14,6 +14,7 @@ import { MdTimer } from "react-icons/md";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
+import { toast } from "react-toastify";
 
 const PlantDetails = () => {
   const { user } = useContext(AuthContext);
@@ -21,7 +22,6 @@ const PlantDetails = () => {
   const { id } = useParams();
   const [plant, setPlant] = useState(null);
   const [loading, setLoading] = useState(true);
-  console.log(location);
 
   useEffect(() => {
     document.title = "Plant Details - Plant Care Tracker";
@@ -39,7 +39,7 @@ const PlantDetails = () => {
       })
       .catch((err) => {
         setPlant(null);
-        console.log(err);
+        toast.error(err);
       });
   }, [id]);
 

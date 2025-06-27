@@ -2,7 +2,7 @@ import React from "react";
 
 const SummaryCard = ({ icon, title, subtitle, note }) => {
   return (
-    <div className="bg-base-100 rounded-xl border border-[#22702d] p-6 flex items-center gap-5 hover:shadow-xs">
+    <div className="bg-base-200 rounded-xl p-6 flex items-center gap-5 hover:shadow-xs">
       <div className="text-green-700">{icon}</div>
       <div>
         <h2 className="text-xl font-semibold">{title}</h2>
