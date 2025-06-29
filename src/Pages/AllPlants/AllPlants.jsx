@@ -48,7 +48,7 @@ const AllPlants = () => {
       </h2>
 
       <div className="w-full bg-base-200 py-3 px-6 flex items-center justify-between rounded-lg mb-4">
-        <div>hello</div>
+        <div></div>
         <button onClick={() => setIsCard(!isCard)} className="font-medium flex gap-2 items-center">
           Change Layout:  {isCard ? <RxTable size={22} /> : <TfiLayoutGrid4Alt size={20} />}
         </button>
